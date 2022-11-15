@@ -1,5 +1,40 @@
-﻿@page "/ZonasAreas"
+﻿@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/ZonasAreas"
+
+@if(zonas is not null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th> <th>Nombre</th> <th>Cant. Personal</th> <th>Cant. Pacientes</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach(Zona z in zonas)
+            {
+            <tr>
+                    <td>@z.ZonaId</td>
+                    <td>@z.Nombre</td>                
+                    <td>@z.Personal.Count()</td>
+                    <td>@z.Pacientes.Count()</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else 
+{
+    <label>No hay</label>
+}
 
 @code {
+    private Zona[]? zonas;
 
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = DbFactory.CreateDbContext();
+
+        zonas = await db.Zonas.ToArrayAsync();
+    }
 }
