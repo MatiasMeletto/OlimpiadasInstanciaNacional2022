@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodeBlu.Data.Models
 {
+    [Index(nameof(DNI))]
     public class Paciente
     {
         public int PacienteId { get; set; }
