@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBlu", "CodeBlu\CodeBlu.csproj", "{C7CDADAA-DF2A-4556-A85B-341D9A6C8891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBlu", "CodeBlu\CodeBlu.csproj", "{C7CDADAA-DF2A-4556-A85B-341D9A6C8891}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBluMovil", "CodeBluMovil\CodeBluMovil.csproj", "{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBluMovil", "CodeBluMovil\CodeBluMovil.csproj", "{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
