@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeBlu.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class CodeBluingDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public CodeBluingDbContext(DbContextOptions<CodeBluingDbContext> options)
             : base(options)
         {
         }
