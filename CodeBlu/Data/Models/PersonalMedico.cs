@@ -6,7 +6,7 @@ namespace CodeBlu.Data.Models
     [Index(nameof(DNI))]
     public class PersonalMedico
     {
-        public int EnfermeroId { get; set; }
+        public int PersonalMedicoId { get; set; }
 
         //datos personales basicos del personal medico, siendo DNI una Unique key
         [Required, StringLength(255)]
