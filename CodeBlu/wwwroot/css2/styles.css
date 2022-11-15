@@ -302,8 +302,11 @@ svg {
 }
 
 table {
-  caption-side: bottom;
-  border-collapse: collapse;
+
+    background-color: darkcyan;
+    text-align: left !important;
+    border-collapse: collapse;
+    width: 50%;
 }
 
 caption {
@@ -312,7 +315,9 @@ caption {
   color: #6c757d;
   text-align: left;
 }
-
+td, th {
+    padding: 10px !important;
+} 
 th {
   text-align: inherit;
   text-align: -webkit-match-parent;

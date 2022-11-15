@@ -1,23 +1,27 @@
 ﻿@inject IDbContextFactory<CodeBluingDbContext> DbFactory
 @page "/ZonasAreas"
+<br>
 
 @if(zonas is not null)
 {
     <table>
         <thead>
             <tr>
-                <th>ID</th> <th>Nombre</th> <th>Cant. Personal</th> <th>Cant. Pacientes</th>
+                <th>ID</th> <th>Nombre</th> <th>Cant. Personal</th> <th>Cant. Pacientes</th><th>Cant llamados</th>
             </tr>
         </thead>
         <tbody>
 
             @foreach(Zona z in zonas)
             {
-            <tr>
+            <tr>              
                     <td>@z.ZonaId</td>
                     <td>@z.Nombre</td>                
                     <td>@z.Personal.Count()</td>
                     <td>@z.Pacientes.Count()</td>
+                    <td>@z.Llamado.Count()</td>
+                    <td><button class="btn-dark"><i class="fas fa-eye"></i></button></td>
+                    <td><button class="btn-dark" ><i class="fas fa-pen"></i></button></td>
             </tr>
             }
         </tbody>
