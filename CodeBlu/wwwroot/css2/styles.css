@@ -11717,3 +11717,9 @@ body {
         right: 0.75rem;
         top: 0.5rem;
     }
+#estilo {
+    border: 2px solid #212529;
+}
+#TituloF {
+   text-decoration:underline;
+}
