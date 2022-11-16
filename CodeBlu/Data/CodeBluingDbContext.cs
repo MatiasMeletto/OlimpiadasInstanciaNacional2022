@@ -10,6 +10,7 @@ namespace CodeBlu.Data
         public DbSet<Paciente> Pacientes{ get; set;}
         public DbSet<PersonalMedico> Personal { get; set;}
         public DbSet<Llamado> Llamados { get; set;}
+        public DbSet<User> Usuarios { get; set;}
         public CodeBluingDbContext(DbContextOptions<CodeBluingDbContext> options)
             : base(options)
         {
