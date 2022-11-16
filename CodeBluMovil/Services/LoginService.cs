@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Android.Gestures;
 using CodeBluCore;
 
 namespace CodeBluMovil.Services

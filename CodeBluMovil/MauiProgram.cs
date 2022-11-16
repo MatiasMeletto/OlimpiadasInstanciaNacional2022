@@ -1,4 +1,4 @@
-﻿using CodeBluMovil.Data;
+﻿
 using Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace CodeBluMovil
@@ -20,7 +20,6 @@ namespace CodeBluMovil
 		builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 
-            builder.Services.AddSingleton<WeatherForecastService>();
 
             return builder.Build();
         }

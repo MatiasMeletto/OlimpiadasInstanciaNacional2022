@@ -1,5 +1,4 @@
-﻿using Android.Hardware.Camera2;
-using Java.Util;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;

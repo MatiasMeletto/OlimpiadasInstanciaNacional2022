@@ -17,7 +17,7 @@
 
         <!-- App Identifier -->
         <ApplicationId>com.companyname.codeblumovil</ApplicationId>
-        <ApplicationIdGuid>49E1472E-8CF4-4C6C-A72D-35B8C8A534E8</ApplicationIdGuid>
+        <ApplicationIdGuid>59EB7E6B-83D2-4FCB-A4B0-586DAC1A7E59</ApplicationIdGuid>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -50,15 +50,35 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="wwwroot\js\datatables-simple-demo.js" />
-      <None Include="wwwroot\js\scripts.js" />
+      <Content Update="Pages\Counter.razor">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
+      <Content Update="Pages\Index.razor">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
+      <Content Update="Pages\LlamadosDia.razor">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
+      <Content Update="Pages\LlamadosGenerales.razor">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
+      <Content Update="Pages\Logueo.razor">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
+      <Content Update="Pages\Registro.razor">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Components.Analyzers" Version="6.0.8" />
+      <UpToDateCheckInput Remove="Pages\ContraseñaOlvidada.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\ContraseñaOlvidada.razor" />
     </ItemGroup>
 	
-    <ItemGroup>
+	<ItemGroup>
       <ProjectReference Include="..\CodeBluCore\CodeBluCore.csproj" />
     </ItemGroup>
 
