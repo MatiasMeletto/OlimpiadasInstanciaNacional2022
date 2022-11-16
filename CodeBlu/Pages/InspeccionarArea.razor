@@ -1,7 +1,74 @@
-﻿@page "/zonasAreas/inspZona/{ZonaId:int?}"
-<h1>areola @ZonaId</h1>
+﻿@inject NavigationManager navigationManager
+@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/zonasAreas/inspZona/{ZonaId:int?}"
+
+<h1>Zona ID nº @ZonaId</h1>
+
+<br />
+<label>@zona.Nombre</label>
+<br />
+<br />
+<br />
+@if(pacientes is not null)
+{
+	<label>Pacientes</label>
+	@foreach(Paciente p in pacientes)
+	{
+		<lablel>@p.Nombre  @p.Apellido</lablel>
+	}
+}
+<br />
+<br />
+@if(personal is not null)
+{
+	<label>personal</label>
+	@foreach(PersonalMedico p in personal)
+	{
+		<lablel>@p.Nombre  @p.Apellido</lablel>
+	}
+}
+<br />
+<br />
+@if(llamados is not null)
+{
+	<label>Llamados</label>
+	@foreach(Llamado l in llamados)
+	{
+		<lablel>@l.TipoLlamado @l.Atendido @l.Paciente.Apellido</lablel>
+	}
+}
+<br />
+<br />
+<br />
+<button @onclick="@(() => { navigationManager.NavigateTo("/zonasAreas"); })"> Volver </button>
 
 @code {
 	[Parameter]
 	public int? ZonaId { get; set; }
+
+	public class ZonaViewModel
+	{
+		public string Nombre { get; set; }
+	}
+
+	public ZonaViewModel zona { get; set; } = new();
+	public Paciente[]? pacientes { get; set; }
+	public Llamado[]? llamados { get; set; }
+	public PersonalMedico[]? personal { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		using var db = DbFactory.CreateDbContext();
+
+		pacientes = await db.Pacientes.Where(p => p.ZonaId == ZonaId).ToArrayAsync();
+		llamados = await db.Llamados.Where(p => p.ZonaId == ZonaId).ToArrayAsync();
+		personal = await db.Personal.Where(p => p.ZonaId == ZonaId).ToArrayAsync();
+
+		Zona? z = await db.Zonas.Where(z => z.ZonaId == ZonaId).SingleOrDefaultAsync();
+
+		if (z is not null)
+		{
+			zona.Nombre = z.Nombre;
+		}
+	}
 }
