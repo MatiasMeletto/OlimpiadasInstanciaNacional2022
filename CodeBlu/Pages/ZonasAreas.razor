@@ -14,15 +14,15 @@
 
             @foreach(Zona z in zonas)
             {
-            <tr>              
+                <tr>              
                     <td>@z.ZonaId</td>
                     <td>@z.Nombre</td>                
                     <td>@z.Personal.Count()</td>
                     <td>@z.Pacientes.Count()</td>
-                    <td>@z.Llamado.Count()</td>
+                    <td>@z.Llamados.Count()</td>
                     <td><button class="btn-dark"><i class="fas fa-eye"></i></button></td>
                     <td><button class="btn-dark" ><i class="fas fa-pen"></i></button></td>
-            </tr>
+                </tr>
             }
         </tbody>
     </table>
@@ -31,8 +31,28 @@ else
 {
     <label>No hay</label>
 }
+<br>
+<br>
+<br>
+<button @onclick="@(() => { creando = true; StateHasChanged(); })"> Crear una nueva area / zona</button>
+
+@if(creando)
+{
+    <input type="text" @bind="zona.Nombre" />
+
+    <button @onclick="@(() => { creando = false; SubirZona(); })"> Crear </button>
+    <button @onclick="@(() => { creando = false; })"> Cancelar </button>
+}
 
 @code {
+    public class ZonaViewModel
+    {
+        [Required, StringLength(255)]
+        public string Nombre { get; set; }
+    }
+
+    private ZonaViewModel zona { get; set; } = new();
+    private bool creando = false;
     private Zona[]? zonas;
 
     protected override async Task OnInitializedAsync()
@@ -40,5 +60,23 @@ else
         using var db = DbFactory.CreateDbContext();
 
         zonas = await db.Zonas.ToArrayAsync();
+    }
+
+    private async void SubirZona()
+    {
+        using var db = DbFactory.CreateDbContext();
+
+        zona.Nombre.Trim();
+
+        if(zona.Nombre is not null)
+        {
+            Zona zonaNueva = new Zona()
+            {
+                Nombre = zona.Nombre
+            };
+
+            await db.Zonas.AddAsync(zonaNueva);
+            await db.SaveChangesAsync();
+        }
     }
 }
