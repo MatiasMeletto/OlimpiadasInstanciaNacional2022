@@ -1,5 +1,7 @@
-﻿@page "/InspArea"
-<h1>areola</h1>
-@code {
+﻿@page "/zonasAreas/inspZona/{ZonaId:int?}"
+<h1>areola @ZonaId</h1>
 
+@code {
+	[Parameter]
+	public int? ZonaId { get; set; }
 }

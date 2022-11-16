@@ -1,7 +1,9 @@
-﻿@inject IDbContextFactory<CodeBluingDbContext> DbFactory
-@page "/ZonasAreas"
-<br>
+﻿@inject NavigationManager navigationManager
+@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/zonasAreas"
 
+@*Este codigo lo que hace es que si la matriz del objeto Zona se tiene algo, osea hay zonas en la base de datos, las muestra 1 por 1 y les da un boton con su propio link*@
+<br>
 @if(zonas is not null)
 {
     <table>
@@ -20,8 +22,8 @@
                     <td>@z.Personal.Count()</td>
                     <td>@z.Pacientes.Count()</td>
                     <td>@z.Llamados.Count()</td>
-                    <td><button href="/InspArea" class="btn-dark"><i class="fas fa-eye"></i></button></td>
-                    <td><button href="/EditarArea" class="btn-dark" ><i class="fas fa-pen"></i></button></td>
+                    <td><button @onclick="@(() => { navigationManager.NavigateTo($"/zonasAreas/inspZona/{z.ZonaId}"); })" class="btn-dark"><i class="fas fa-eye"></i></button></td>
+                    <td><button @onclick="@(() => { navigationManager.NavigateTo($"/zonasAreas/editarZona/{z.ZonaId}"); })" class="btn-dark"><i class="fas fa-pen"></i></button></td>
                 </tr>
             }
         </tbody>
@@ -29,37 +31,46 @@
 }
 else 
 {
-    <label>No hay</label>
+    <label>Cargando...</label>
 }
+
+@*Esta parte esta dedicada a la creacion de nuevas zonas*@
 <br>
 @if(!creando)
 {
     <br>
     <br>
+    @*Si se da clic en el boton, creando (variable de comprobacion que muestra o no esta parte) se vuelve verdadero y manda a re renderizar la pag*@
     <button @onclick="@(() => { creando = true; StateHasChanged(); })"> Crear una nueva area / zona</button>
 }
+
 
 @if(creando)
 {
     <input type="text" @bind="zona.Nombre" />
-
+    
+    @*La parte de crear es simple, solo un input que diga el nombre y luego 2 botnoes, uno de crear y otro de cancelar, ambos mandan a re renderizar la pag*@
     <button @onclick="@(() => { creando = false; SubirZona(); })"> Crear </button>
-    <button @onclick="@(() => { creando = false; })"> Cancelar </button>
+    <button @onclick="@(() => { creando = false; StateHasChanged(); })"> Cancelar </button>
 }
 
 @code {
+    //creo un viewModel para poder manipular datos libremente en vista
     public class ZonaViewModel
     {
-        [Required, StringLength(255)]
-        public string Nombre { get; set; }
+        [StringLength(255)]
+        public string? Nombre { get; set; }
     }
 
     private ZonaViewModel zona { get; set; } = new();
     private bool creando;
+    //declaro un matriz que va a servir para mostrar todas las zonas en vista
     private Zona[]? zonas;
 
     protected override async Task OnInitializedAsync()
     {
+        //inicializo el creando en false y que consulte a la base de datos y traiga todas las zonas y las guarde en Zona[]? zonas
+
         creando = false;
 
         using var db = DbFactory.CreateDbContext();
@@ -67,11 +78,12 @@ else
         zonas = await db.Zonas.ToArrayAsync();
     }
 
+    //Este metodo lo que hace es leer el viewmodel y subir a la base de datos lo que haya, luego resetea la lista, deja el creando en falso, resetea el nombre del viewModel y re renderiza la pag
     private async void SubirZona()
     {
         using var db = DbFactory.CreateDbContext();
 
-        if(zona.Nombre is not null)
+        if (zona.Nombre is not null)
         {
             zona.Nombre.Trim();
 
@@ -84,6 +96,9 @@ else
             await db.SaveChangesAsync();
         }
 
+        zonas = await db.Zonas.ToArrayAsync();
         creando = false;
+        zona.Nombre = null;
+        StateHasChanged();
     }
 }
