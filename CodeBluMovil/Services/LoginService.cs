@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Android.Gestures;
 using CodeBluCore;
+using CodeBluMovil.StaticLogin;
+using static Android.Content.ClipData;
 
 namespace CodeBluMovil.Services
 {
@@ -27,7 +30,8 @@ namespace CodeBluMovil.Services
                 WriteIndented = true
             };
         }
-        public async Task SendLogAsync(UserDTO user)
+
+        public async Task AutenticacionManual(UserDTO user)
         {
             Uri uri = new Uri(string.Format(userUrl, string.Empty));
 
@@ -40,31 +44,15 @@ namespace CodeBluMovil.Services
                 response = await _client.PostAsync(uri, content);
 
                 if (response.IsSuccessStatusCode)
-                    Debug.WriteLine(@"\tComment successfully saved.");
+                {
+                    LogIn.Token = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(@"\tAccount succefully autenticathed.");
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
         }
-        //public async Task<bool> GetAuthAsync()
-        //{
-        //    Uri uri = new Uri(string.Format(userUrl, string.Empty));
-        //    try
-        //    {
-        //        HttpResponseMessage response = await _client.GetAsync(uri);
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            string content = await response.Content.ReadAsStringAsync();
-        //            Comments = JsonSerializer.Deserialize<List<CommentDTO>>(content, _serializerOptions);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine(@"\tERROR {0}", ex.Message);
-        //    }
-
-        //    return Comments;
-        //}
     }
 }

@@ -3,6 +3,7 @@ using CodeBluCore;
 using CodeBlu.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -46,9 +47,19 @@ namespace CodeBlu.Controllers
 
         // POST api/<UsersController>
         //[HttpPost]
-        public void Post([FromBody] UserDTO value)
+        public ActionResult<string> Post([FromBody] UserDTO value)
         {
-            User user = _dbContext.Usuarios.Single(u => u.Usuario == value.Usuario);
+            User? user = _dbContext.Usuarios.SingleOrDefault(u => u.Usuario == value.Usuario);
+
+            if (value.Contrasena == user?.Contrasena)
+            {
+                string token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.Usuario} {user.Contrasena}"));
+                return Ok(token);
+            }
+            else
+            {
+                return Forbid();
+            }
         }
 
         //// PUT api/<UsersController>/5

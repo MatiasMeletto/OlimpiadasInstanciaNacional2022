@@ -5,6 +5,6 @@ namespace CodeBluMovil.Services
     public interface ILoginService
     {
         UserDTO User { get; }
-        //Task<bool> 
+        Task<string> Auth(UserDTO user);
     }
 }
