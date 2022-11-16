@@ -1,5 +1,58 @@
-﻿@page "/llamados"
+﻿@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/llamados"
+
+<h5>Crear llamado / reporte</h5>
+
+<select @bind="llamado.TipoLlamado">
+	<option value="@TipoLlamado.Emergencia">Emergencia</option>
+	<option value="@TipoLlamado.Normal">Normal</option>
+</select>
+<br />
+<select @bind="llamado.OrigenLlamado">
+	<option value="@TipoOrigenLlamado.Banio">Baño</option>
+	<option value="@TipoOrigenLlamado.Cama">Cama</option>
+</select>
+<br />
+<label>atendido: </label>
+<input type="checkbox" @bind="llamado.Atendido" />
+<br />
+<br />
+<button @onclick="SubirLlamado" >Cargar</button>
 
 @code {
+	public class LlamadoViewModel
+	{
+		public TipoLlamado TipoLlamado { get; set; }
+		public TipoOrigenLlamado OrigenLlamado { get; set; }
+		public bool Atendido { get; set; }
+		public DateTime FechaHora { get; set; }
+		public DateTime HoraAtendido { get; set; }
+	}
 
+	public LlamadoViewModel llamado { get; set; } = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		using var db = DbFactory.CreateDbContext();
+
+		llamado.FechaHora = DateTime.Now;
+		llamado.HoraAtendido = DateTime.Now;
+	}
+
+	public async void SubirLlamado()
+	{
+		using var db = DbFactory.CreateDbContext();
+
+		Llamado l = new()
+		{
+			TipoLlamado = llamado.TipoLlamado,
+			OrigenLlamado = llamado.OrigenLlamado,
+			Atendido = llamado.Atendido,
+			FechaHora = llamado.FechaHora,
+			HoraAtendido = llamado.HoraAtendido
+		};
+
+		await db.Llamados.AddAsync(l);
+		await db.SaveChangesAsync();
+	}
 }
