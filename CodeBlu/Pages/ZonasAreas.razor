@@ -32,9 +32,12 @@ else
     <label>No hay</label>
 }
 <br>
-<br>
-<br>
-<button @onclick="@(() => { creando = true; StateHasChanged(); })"> Crear una nueva area / zona</button>
+@if(!creando)
+{
+    <br>
+    <br>
+    <button @onclick="@(() => { creando = true; StateHasChanged(); })"> Crear una nueva area / zona</button>
+}
 
 @if(creando)
 {
@@ -52,11 +55,13 @@ else
     }
 
     private ZonaViewModel zona { get; set; } = new();
-    private bool creando = false;
+    private bool creando;
     private Zona[]? zonas;
 
     protected override async Task OnInitializedAsync()
     {
+        creando = false;
+
         using var db = DbFactory.CreateDbContext();
 
         zonas = await db.Zonas.ToArrayAsync();
@@ -78,5 +83,7 @@ else
             await db.Zonas.AddAsync(zonaNueva);
             await db.SaveChangesAsync();
         }
+
+        creando = false;
     }
 }
