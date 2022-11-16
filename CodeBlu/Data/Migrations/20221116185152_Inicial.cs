@@ -10,6 +10,21 @@ namespace CodeBlu.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Usuario = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Contrasena = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    DNI = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Zonas",
                 columns: table => new
                 {
@@ -167,12 +182,25 @@ namespace CodeBlu.Data.Migrations
                 name: "IX_Personal_ZonaId",
                 table: "Personal",
                 column: "ZonaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_DNI",
+                table: "Usuarios",
+                column: "DNI");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_Usuario",
+                table: "Usuarios",
+                column: "Usuario");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Llamados");
+
+            migrationBuilder.DropTable(
+                name: "Usuarios");
 
             migrationBuilder.DropTable(
                 name: "Pacientes");

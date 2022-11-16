@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeBlu.Data.Migrations
 {
     [DbContext(typeof(CodeBluingDbContext))]
-    [Migration("20221115173551_Inicial")]
+    [Migration("20221116185152_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -204,6 +204,38 @@ namespace CodeBlu.Data.Migrations
                     b.HasIndex("ZonaId");
 
                     b.ToTable("Personal");
+                });
+
+            modelBuilder.Entity("CodeBlu.Data.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
+
+                    b.Property<string>("Contrasena")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("DNI")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Usuario")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("DNI");
+
+                    b.HasIndex("Usuario");
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("CodeBlu.Data.Models.Zona", b =>

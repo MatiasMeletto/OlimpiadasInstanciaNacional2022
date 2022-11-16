@@ -83,10 +83,8 @@ else
     {
         using var db = DbFactory.CreateDbContext();
 
-        if (zona.Nombre is not null)
+        if (!string.IsNullOrWhiteSpace(zona.Nombre))
         {
-            zona.Nombre.Trim();
-
             Zona zonaNueva = new Zona()
             {
                 Nombre = zona.Nombre
@@ -94,11 +92,11 @@ else
 
             await db.Zonas.AddAsync(zonaNueva);
             await db.SaveChangesAsync();
+            creando = false;
+            zona.Nombre = null;
+            zonas = await db.Zonas.ToArrayAsync();
+            StateHasChanged();
         }
 
-        zonas = await db.Zonas.ToArrayAsync();
-        creando = false;
-        zona.Nombre = null;
-        StateHasChanged();
     }
 }

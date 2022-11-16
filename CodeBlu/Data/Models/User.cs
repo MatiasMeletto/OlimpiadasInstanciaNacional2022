@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace CodeBlu.Data.Models
 {
     [Index(nameof(DNI))]
+    [Index(nameof(Usuario))]
     public class User
     {
         public int UserId { get; set; }

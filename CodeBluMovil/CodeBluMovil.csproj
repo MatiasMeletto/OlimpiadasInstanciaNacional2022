@@ -53,5 +53,9 @@
       <None Include="wwwroot\js\datatables-simple-demo.js" />
       <None Include="wwwroot\js\scripts.js" />
     </ItemGroup>
+	
+    <ItemGroup>
+      <ProjectReference Include="..\CodeBluCore\CodeBluCore.csproj" />
+    </ItemGroup>
 
 </Project>
