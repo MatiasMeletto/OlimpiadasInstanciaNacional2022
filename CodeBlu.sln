@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBlu", "CodeBlu\CodeBlu.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBluMovil", "CodeBluMovil\CodeBluMovil.csproj", "{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBluCore", "CodeBluCore\CodeBluCore.csproj", "{ADD5B037-494F-4633-9777-CDCDF7C3008C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{ADD5B037-494F-4633-9777-CDCDF7C3008C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD5B037-494F-4633-9777-CDCDF7C3008C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD5B037-494F-4633-9777-CDCDF7C3008C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD5B037-494F-4633-9777-CDCDF7C3008C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
