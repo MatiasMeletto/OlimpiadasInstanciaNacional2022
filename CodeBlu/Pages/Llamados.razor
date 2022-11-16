@@ -2,10 +2,11 @@
 @inject NavigationManager navigationManager
 @page "/llamados"
 
-<h1>Llamados lista</h1>
+<h1 class="text-center">Llamados lista</h1>
 
 @if (llamados is not null)
 {
+	<div class="justify-content-center"></div>
 	<table>
 		<thead>
 			<tr>
@@ -32,31 +33,39 @@
 			}
 		</tbody>
 	</table>
+	
 }
 else
 {
 	<label>Cargando...</label>
 }
-
-<h5>Crear llamado / reporte</h5>
-
-<select @bind="llamado.TipoLlamado">
+<br>
+<br>
+<h5>Crear llamado/reporte</h5>
+<label> Tipo de llamado</label>
+<br>
+<select id="selector" @bind="llamado.TipoLlamado">
 	<option value="@TipoLlamado.Emergencia">Emergencia</option>
 	<option value="@TipoLlamado.Normal">Normal</option>
 </select>
-<br />
-<select @bind="llamado.OrigenLlamado">
+<br>
+<label> Origen de llamado</label>
+<br>
+<select id="selector" @bind="llamado.OrigenLlamado">
 	<option value="@TipoOrigenLlamado.Banio">Baño</option>
 	<option value="@TipoOrigenLlamado.Cama">Cama</option>
 </select>
-<br />
-<label>atendido: </label>
+<br>
+<label>Atendido </label>
 <input type="checkbox" @bind="llamado.Atendido" />
+<br>
+<br>
+
 @if(pacientes is not null)
 {
-	<label> PACIENTES:</label>
-	<br />
-	<select @bind="llamado.PacienteId">
+	<label> Paciente</label>
+	<br>
+	<select id="selector" @bind="llamado.PacienteId">
 		@foreach(Paciente p in pacientes)
 		{
 			<option value="@p.PacienteId">@p.Nombre  @p.Apellido</option>
