@@ -46,7 +46,7 @@ namespace CodeBlu.Data.Models
         public Zona Zona { get; set; }
 
         //relacion con el personal medico que tiene asignado
-        public int PersonaMedicoId { get; set; }
+        public int PersonalMedicoId { get; set; }
         [ForeignKey("PersonalMedicoId")]
         public PersonalMedico Personal { get; set; }
 
