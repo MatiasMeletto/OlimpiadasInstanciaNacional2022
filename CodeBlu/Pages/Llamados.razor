@@ -117,7 +117,7 @@ else
 				Atendido = llamado.Atendido,
 				FechaHora = llamado.FechaHora,
 				HoraAtendido = llamado.HoraAtendido,
-				Paciente = p	
+				PacienteId = p.PacienteId	
 			};
 
 			await db.Llamados.AddAsync(l);
