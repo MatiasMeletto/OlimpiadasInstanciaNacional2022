@@ -5,9 +5,11 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBlu", "CodeBlu\CodeBlu.csproj", "{C7CDADAA-DF2A-4556-A85B-341D9A6C8891}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBluMovil", "CodeBluMovil\CodeBluMovil.csproj", "{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBluMovilmal", "CodeBluMovil\CodeBluMovilmal.csproj", "{A21DDF0E-0B5D-4339-A8C5-0FCEBE6960C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBluCore", "CodeBluCore\CodeBluCore.csproj", "{ADD5B037-494F-4633-9777-CDCDF7C3008C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBluCore", "CodeBluCore\CodeBluCore.csproj", "{ADD5B037-494F-4633-9777-CDCDF7C3008C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBluMovil", "CodeBlueMovil\CodeBluMovil.csproj", "{FE915158-BA85-4014-8305-336A47BEC7D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,12 @@ Global
 		{ADD5B037-494F-4633-9777-CDCDF7C3008C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADD5B037-494F-4633-9777-CDCDF7C3008C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADD5B037-494F-4633-9777-CDCDF7C3008C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE915158-BA85-4014-8305-336A47BEC7D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE915158-BA85-4014-8305-336A47BEC7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE915158-BA85-4014-8305-336A47BEC7D9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{FE915158-BA85-4014-8305-336A47BEC7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE915158-BA85-4014-8305-336A47BEC7D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE915158-BA85-4014-8305-336A47BEC7D9}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

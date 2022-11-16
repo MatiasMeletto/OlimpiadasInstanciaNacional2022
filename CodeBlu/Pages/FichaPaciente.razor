@@ -2,87 +2,87 @@
 <h1 class="text-lg-center">Fichas de pacientes</h1>
     <br>
     
-    <div class="row container">
-    <h4 id="TituloF">Crear ficha de paciente</h4>
+<div class="row container">
+    <h4 >Crear ficha de paciente</h4>
     <br>
     <br>
     <br>
     <div class="col-4">
-    <h6 id="TituloF">Datos</h6>
+    <h6 >Datos</h6>
 
-    <label id="texto">Nombre:</label>
+    <label >Nombre:</label>
     <br>
-    <input id="estilo" type="text"  />
+    <input  type="text"  />
     <br>
-    <label id="texto">Apellido:</label>
+    <label >Apellido:</label>
         <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
-    <label id="texto">DNI:</label>
+    <label >DNI:</label>
     <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
-    <label id="texto">Tipo de sangre:</label>
+    <label >Tipo de sangre:</label>
         <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
-    <label id="texto">Contacto de emergencia:</label>
+    <label >Contacto de emergencia:</label>
         <br>
-    <input id="estilo" type="text"  />
+    <input  type="text"  />
     <br>
-    <label id="texto">Fecha de nacimiento:</label>
+    <label >Fecha de nacimiento:</label>
         <br>
-    <input id="estilo" type="text"  />
+    <input  type="text"  />
     <br>
-    <label id="texto">Edad:</label>
+    <label >Edad:</label>
         <br>
-    <input id="estilo" type="text"  />
+    <input  type="text"  />
     <br>
     <br>
-</div>
+    </div>
     <div class="col-lg-4">
     <h6 id="TituloF">Antecedentes</h6>
-    <label id="texto">Asma:</label>
-    <input id="estilo" type="checkbox"  />
+    <label >Asma:</label>
+    <input  type="checkbox"  />
         <br>
-    <label id="texto">Varicela:</label>
-    <input id="estilo" type="checkbox"  />
+    <label >Varicela:</label>
+    <input  type="checkbox"  />
     <br>
-    <label id="texto">Alergia:</label>
-    <input id="estilo" type="checkbox"  />
+    <label >Alergia:</label>
+    <input  type="checkbox"  />
         <br>
         @*Aca iria el select para cuando este el bool en true*@
-    <label id="texto">Medicacion:</label>
-    <input id="estilo" type="checkbox"/>
+    <label >Medicacion:</label>
+    <input  type="checkbox"/>
         <br>
-        <label id="texto">Detalles de antecedentes:</label>
+        <label >Detalles de antecedentes:</label>
         <br>
-        <input id="estilo" type="text" />
+        <input  type="text" />
     @*Aca iria el select para cuando este el bool en true*@
     <br>
 </div>
     <div class="col-lg-4">
     <h6 id="TituloF">Datos de ingreso</h6>
 
-    <label id="texto">Obra social:</label>
+    <label >Obra social:</label>
         <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
-    <label id="texto">N° de afiliado:</label>
+    <label >N° de afiliado:</label>
         <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
-    <label id="texto">Medico de cabecera:</label>
+    <label >Medico de cabecera:</label>
         <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
-    <label id="texto">Diagnostico de ingreso:</label>
+    <label >Diagnostico de ingreso:</label>
         <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
-    <label id="texto">Patologia base:</label>
+    <label >Patologia base:</label>
         <br>
-    <input id="estilo" type="text" />
+    <input  type="text" />
     <br>
     <br>
     <label>
@@ -103,5 +103,34 @@
     </div>
                 
 @code {
-
+    public class PacienteViewModel
+    {
+        [Required, StringLength(255)]
+        public string Nombre { get; set; }
+        [Required, StringLength(255)]
+        public string Apellido { get; set; }
+        [Required, StringLength(255)]
+        public string DNI { get; set; }
+        [Required, StringLength(255)]
+        public string ContactoEmergencia{ get; set; }
+        public DateTime FechaNacimiento { get; set; } 
+        public int Edad { get; set; }
+        public bool Asma { get; set; }
+        public bool TuvoVaricela { get; set; } 
+        [Required, StringLength(45)]
+        public string TipoSangre { get; set; }
+        [Required, StringLength(255)]
+        public string ObraSocial { get; set; }
+        [Required, StringLength(255)]
+        public string MedicoCabecera { get; set; }
+        [Required, StringLength(255)]
+        public string DiagnosticoIngreso { get; set; }
+        public bool Alergia { get; set; } 
+        [StringLength(255)]
+        public string? DetalleAlergia { get; set; }
+        [Required, StringLength(255)]
+        public string PatologiaBase { get; set; } 
+        public bool TomaMedicacion { get; set; } 
+        public string? DetalleMedicacion { get; set; }
+    }
 }

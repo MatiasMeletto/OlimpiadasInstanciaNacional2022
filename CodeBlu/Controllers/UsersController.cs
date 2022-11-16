@@ -20,22 +20,22 @@ namespace CodeBlu.Controllers
         }
 
         // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<UserDTO> Get()
-        {
-            List<User> usuarios= _dbContext.Usuarios.AsNoTracking().ToList();
-            List<UserDTO> usersDTO = new List<UserDTO>();
-            foreach (User u in usuarios)
-            {
-                UserDTO userDTO = new UserDTO()
-                {
-                    Usuario = u.Usuario,
-                    Contrasena = u.Contrasena
-                };
-                usersDTO.Add(userDTO);
-            }
-            return usersDTO;
-        }
+        //[HttpGet]
+        //public IEnumerable<UserDTO> Get()
+        //{
+        //    List<User> usuarios= _dbContext.Usuarios.AsNoTracking().ToList();
+        //    List<UserDTO> usersDTO = new List<UserDTO>();
+        //    foreach (User u in usuarios)
+        //    {
+        //        UserDTO userDTO = new UserDTO()
+        //        {
+        //            Usuario = u.Usuario,
+        //            Contrasena = u.Contrasena
+        //        };
+        //        usersDTO.Add(userDTO);
+        //    }
+        //    return usersDTO;
+        //}
 
         // GET api/<UsersController>/5
         //[HttpGet("{id}")]
@@ -46,16 +46,10 @@ namespace CodeBlu.Controllers
 
         // POST api/<UsersController>
         //[HttpPost]
-        //public void Post([FromBody] UserDTO value)
-        //{
-        //    User usuario = new User()
-        //    {
-        //        Content = value.Content,
-        //        Date = value.Date
-        //    };
-        //    _dbContext.Usuarios.Add(usuario);
-        //    _dbContext.SaveChanges();
-        //}
+        public void Post([FromBody] UserDTO value)
+        {
+            User user = _dbContext.Usuarios.Single(u => u.Usuario == value.Usuario);
+        }
 
         //// PUT api/<UsersController>/5
         //[HttpPut("{id}")]
