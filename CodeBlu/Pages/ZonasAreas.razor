@@ -83,7 +83,7 @@ else
     {
         using var db = DbFactory.CreateDbContext();
 
-        if (!string.IsNullOrWhiteSpace(zona.Nombre))
+        if (!string.IsNullOrWhiteSpace(zona.Nombre)) // si hay algo en el input se guarda en la base de datos
         {
             Zona zonaNueva = new Zona()
             {
