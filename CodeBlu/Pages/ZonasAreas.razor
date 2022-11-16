@@ -71,10 +71,10 @@ else
     {
         using var db = DbFactory.CreateDbContext();
 
-        zona.Nombre.Trim();
-
         if(zona.Nombre is not null)
         {
+            zona.Nombre.Trim();
+
             Zona zonaNueva = new Zona()
             {
                 Nombre = zona.Nombre
