@@ -10,7 +10,6 @@
     <table style="margin: 0 auto;" id="tabla1">
         <thead>
             <tr>
-                <th>ID</th>
 				<th>Tipo de llamado</th>
 				<th>Origen del llamado</th>
 				<th>Atendido</th>
@@ -65,6 +64,40 @@ else
 	</select>
 }
 <br>
+@if (zonas is not null)
+{
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="selector1"> Zona: </label>
+            <select id="selector1" @bind="llamado.ZonaId">
+                <option selected value="0">-Seleccione una zona-</option>
+                @foreach (Zona z in zonas)
+                {
+                    <option value="@z.ZonaId">@z.Nombre</option>
+                }
+            </select>
+
+        </div>
+    </div>
+
+}
+@if (personal is not null)
+{
+	<div class="row mb-3">
+		<div class="col-md-12">
+			<label for="selector1"> Personal a cargo: </label>
+			<select id="selector1" @bind="llamado.PersonalMedicoId">
+				<option selected value="0">-Seleccione un enfermero/a-</option>
+				@foreach (PersonalMedico p in personal)
+				{
+					<option value="@p.PersonalMedicoId">@p.Nombre  @p.Apellido</option>
+				}
+			</select>
+
+		</div>
+	</div>
+}
+<br>
 <label>Atendido </label>
 <input type="checkbox" @bind="llamado.Atendido" />
 <br>
@@ -80,9 +113,13 @@ else
 		public DateTime FechaHora { get; set; }
 		public DateTime HoraAtendido { get; set; }
 		public int PacienteId { get; set; }
+		public int ZonaId { get; set; }
+		public int PersonalMedicoId { get; set; }
 	}
 
 	public LlamadoViewModel llamado { get; set; } = new();
+	public PersonalMedico[]? personal;
+	public Zona[]? zonas;
 	public Llamado[]? llamados;
 	public Paciente[]? pacientes;
 
@@ -93,17 +130,17 @@ else
 		llamado.FechaHora = DateTime.Now;
 		llamado.HoraAtendido = DateTime.Now;
 
+		zonas = await db.Zonas.ToArrayAsync();
 		llamados = await db.Llamados.ToArrayAsync();
 		pacientes = await db.Pacientes.ToArrayAsync();
+		personal = await db.Personal.ToArrayAsync();
 	}
 
 	public async void SubirLlamado()
 	{
 		using var db = DbFactory.CreateDbContext();
 
-		Paciente? p = await db.Pacientes.Where(p => p.PacienteId == llamado.PacienteId).SingleOrDefaultAsync();
-
-		if(p is not null)
+		if(llamado.ZonaId != 0 && llamado.PersonalMedicoId != 0 && llamado.PacienteId != 0)
 		{
 			Llamado l = new()
 			{
@@ -112,11 +149,14 @@ else
 				Atendido = llamado.Atendido,
 				FechaHora = llamado.FechaHora,
 				HoraAtendido = llamado.HoraAtendido,
-				PacienteId = p.PacienteId	
+				PacienteId = llamado.PacienteId,
+				ZonaId = llamado.ZonaId,
+				PersonalMedicoId = llamado.PersonalMedicoId
 			};
 
 			await db.Llamados.AddAsync(l);
 			await db.SaveChangesAsync();
+			llamados = await db.Llamados.ToArrayAsync();
 			StateHasChanged();
 		}
 	}
