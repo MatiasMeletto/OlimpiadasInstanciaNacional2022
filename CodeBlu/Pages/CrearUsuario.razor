@@ -1,4 +1,7 @@
-﻿@page "/crearUsuario"
+﻿@inject NavigationManager navigationManager
+@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/crearUsuario"
+
 <div id="layoutAuthentication">
     <div id="layoutAuthentication_content">
         <main>
@@ -12,39 +15,53 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <div class="form-floating mb-3 mb-md-0">
-                                                <input class="form-control" id="inputFirstName" type="text" />
+                                                <input class="form-control" id="inputFirstName" type="text" @bind="personal.Nombre" />
                                                 <label for="inputFirstName">Nombre</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input class="form-control" id="inputLastName" type="text" />
+                                                <input class="form-control" id="inputLastName" type="text" @bind="personal.Apellido" />
                                                 <label for="inputLastName">Apellido</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" type="email" />
+                                        <input class="form-control" id="inputEmail" type="text" @bind="personal.DNI" />
                                         <label for="inputEmail">DNI</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" type="email" />
+                                        <input class="form-control" id="inputEmail" type="text" @bind="personal.Usuario" />
                                         <label for="inputEmail">Nombre de usuario</label>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <div class="form-floating mb-3 mb-md-0">
-                                                <input class="form-control" id="inputPassword" type="password" />
+                                                <input class="form-control" id="inputPassword" type="password" @bind="personal.Contrasena" />
                                                 <label for="inputPassword">Contraseña</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating mb-3 mb-md-0">
-                                                <input class="form-control" id="inputPasswordConfirm" type="password" />
+                                                <input class="form-control" id="inputPasswordConfirm" type="password" @bind="personal.ContrasenaConfirm" />
                                                 <label for="inputPasswordConfirm">Confirmar Contr.</label>
                                             </div>
                                         </div>
                                     </div>
+                                    @if (zonas is not null)
+                                    {
+                                        <div class="form-floating mb-3">
+                                            <label> Zona: </label>
+                                            <br>
+                                            <select id="selector" @bind="personal.ZonaId">
+                                                <option selected value="0">-Seleccione una zona-</option>
+                                                @foreach (Zona z in zonas)
+                                                {
+                                                    <option value="@z.ZonaId">@z.Nombre</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    }
                                     <div class="mt-4 mb-0">
                                         <div class="d-grid"><a class="btn btn-primary btn-block" @onclick="CrearUsuarioYPersonal">Crear</a></div>
                                     </div>
@@ -87,12 +104,55 @@
         [Required, StringLength(255)]
         public string Contrasena { get; set; } 
         [Required, StringLength(255)]
+        public string ContrasenaConfirm { get; set; } 
+        [Required, StringLength(255)]
         public string Usuario { get; set; } 
         public int ZonaId { get; set; }
     }
 
-     public async void CrearUsuarioYPersonal()
-     {
+    private PersonalMedicoViewModel personal { get; set; } = new();
+    private Zona[]? zonas { get; set; }
 
-     }
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+
+        zonas = await db.Zonas.ToArrayAsync();
+    }
+
+    public async void CrearUsuarioYPersonal()
+    {
+        if (personal.ZonaId != 0 && !string.IsNullOrWhiteSpace(personal.Apellido) && !string.IsNullOrWhiteSpace(personal.Nombre) && !string.IsNullOrWhiteSpace(personal.Contrasena) && !string.IsNullOrWhiteSpace(personal.ContrasenaConfirm) && !string.IsNullOrWhiteSpace(personal.DNI) && !string.IsNullOrWhiteSpace(personal.Usuario))
+        {
+            using var db = await DbFactory.CreateDbContextAsync();
+
+            PersonalMedico? comprobante1 = await db.Personal.Where(p => p.DNI == personal.DNI).SingleOrDefaultAsync();
+            User? comprobante2 = await db.Usuarios.Where(u => u.Usuario == personal.Usuario).SingleOrDefaultAsync();
+
+            if (personal.Contrasena == personal.ContrasenaConfirm && comprobante1 is null && comprobante2 is null)
+            {
+                PersonalMedico p = new()
+                    {
+                        Apellido = personal.Apellido,
+                        Nombre = personal.Nombre,
+                        DNI = personal.DNI,
+                        ZonaId = personal.ZonaId,
+                    };
+
+                User u = new()
+                    {
+                        Contrasena = personal.Contrasena,
+                        Usuario = personal.Usuario,
+                        DNI = personal.DNI
+                    };
+
+                await db.Personal.AddAsync(p);
+                await db.Usuarios.AddAsync(u);
+                await db.SaveChangesAsync();
+
+                personal = new();
+                StateHasChanged();
+            }
+        }
+    }
  }
