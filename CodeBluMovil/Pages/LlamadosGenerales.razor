@@ -1,12 +1,51 @@
-﻿@inject NavigationManager navigationManager
+﻿@inject ILlamadosService LlamadosService
+@inject NavigationManager navigationManager
 @page "/LlamadosGenerales"
+
+@if (LlamadosService.Llamados is not null)
+{
+	<table>
+		<thead>
+			<tr>
+				<th>Tipo de llamado</th>
+				<th>Origen del llamado</th>
+				<th>Atendido</th>
+				<th>Fecha y hora de origen</th>
+				<th>Fecha y hora de atendido</th>
+				<th>Zona</th>
+				<th>Paciente</th>
+				<th>Quien atendio</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (LlamadoDTO l in LlamadosService.Llamados)
+			{
+				<tr>
+					<td>@l.TipoLlamado.ToString()</td>
+					<td>@l.OrigenLlamado.ToString()</td>
+					<td>@l.Atendido</td>
+					<td>@l.FechaHora</td>
+					<td>@l.HoraAtendido</td>
+					<td>@l.Zona</td>
+					<td>@l.Paciente</td>
+					<td>@l.Personal</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
 @code {
-
-	
-		protected override async Task OnInitializedAsync()
+	protected override async Task OnInitializedAsync()
+	{
+		if (string.IsNullOrWhiteSpace(LogIn.Token))
 		{
-			if (string.IsNullOrWhiteSpace(LogIn.Token))
-				navigationManager.NavigateTo("/Logueo");
+			navigationManager.NavigateTo("/Logueo");
 		}
-
+		else
+		{
+			await LlamadosService.RefreshDataAsync();
+			StateHasChanged();
+		}
+	}
 }

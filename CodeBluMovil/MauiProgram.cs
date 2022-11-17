@@ -22,6 +22,7 @@ namespace CodeBluMovil
 #endif
 
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ILlamadosService, LlamadoService>();
 
             return builder.Build();
         }
