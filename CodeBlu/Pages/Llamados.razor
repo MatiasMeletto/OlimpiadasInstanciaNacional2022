@@ -3,23 +3,22 @@
 @page "/llamados"
 
 <h1 class="text-center">Llamados lista</h1>
-
+<div class="Centrar container">
 @if (llamados is not null)
 {
-	<div class="justify-content-center"></div>
-	<table>
-		<thead>
-			<tr>
-				<th>ID</th>
+	    <div class="EstiloTabla container"></div>
+    <table style="margin: 0 auto;" id="tabla1">
+        <thead>
+            <tr>
+                <th>ID</th>
 				<th>Tipo de llamado</th>
 				<th>Origen del llamado</th>
 				<th>Atendido</th>
 				<th>Fecha y hora de origen</th>
 				<th>Fecha y hora de atendido</th>
-			</tr>
-		</thead>
-		<tbody>
-
+            </tr>
+        </thead>
+        <tbody>
 			@foreach (Llamado l in llamados)
 			{
 				<tr>
@@ -28,12 +27,10 @@
 					<td>@l.Atendido</td>
 					<td>@l.FechaHora</td>
 					<td>@l.HoraAtendido</td>
-					@*<td><button @onclick="@(() => { navigationManager.NavigateTo($"/zonasAreas/inspZona/{z.ZonaId}"); })" class="btn-dark"><i class="fas fa-eye"></i></button></td>*@
 				</tr>
 			}
-		</tbody>
-	</table>
-	
+        </tbody>
+    </table>
 }
 else
 {
@@ -59,7 +56,7 @@ else
 <label>Atendido </label>
 <input type="checkbox" @bind="llamado.Atendido" />
 <br>
-<br>
+
 
 @if(pacientes is not null)
 {
@@ -72,10 +69,10 @@ else
 		}
 	</select>
 }
-<br />
-<br />
+<br>
+<br>
 <button @onclick="SubirLlamado" >Cargar</button>
-
+</div>
 @code {
 	public class LlamadoViewModel
 	{

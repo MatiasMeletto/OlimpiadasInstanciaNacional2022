@@ -48,19 +48,23 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     @if (zonas is not null)
                                     {
-                                        <div class="form-floating mb-3">
-                                            <label> Zona: </label>
-                                            <br>
-                                            <select id="selector" @bind="personal.ZonaId">
-                                                <option selected value="0">-Seleccione una zona-</option>
-                                                @foreach (Zona z in zonas)
-                                                {
-                                                    <option value="@z.ZonaId">@z.Nombre</option>
-                                                }
-                                            </select>
-                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-12">
+                                               <label for="selector1"> Zona: </label>
+                                                <select  id="selector1" @bind="personal.ZonaId">
+                                                        <option selected value="0">-Seleccione una zona-</option>
+                                                        @foreach (Zona z in zonas)
+                                                        {
+                                                            <option value="@z.ZonaId">@z.Nombre</option>
+                                                        }
+                                                    </select>
+                                                
+                                            </div>
+                                            </div>
+                                     
                                     }
                                     <div class="mt-4 mb-0">
                                         <div class="d-grid"><a class="btn btn-primary btn-block" @onclick="CrearUsuarioYPersonal">Crear</a></div>
@@ -76,23 +80,9 @@
     <div class="row justify-content-center">
         <label>*Recuerde que para crear un usuario es necesario que existan zonas*</label>
     </div>
-    <div id="layoutAuthentication_footer">
-        <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                    <div>
-                        <a href="#">Privacy Policy</a>
-                        &middot;
-                        <a href="#">Terms &amp; Conditions</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
 </div>
 
-@code{
+@code {
     public class PersonalMedicoViewModel
     {
         [Required, StringLength(255)]
@@ -102,11 +92,11 @@
         [Required, StringLength(255)]
         public string DNI { get; set; }
         [Required, StringLength(255)]
-        public string Contrasena { get; set; } 
+        public string Contrasena { get; set; }
         [Required, StringLength(255)]
-        public string ContrasenaConfirm { get; set; } 
+        public string ContrasenaConfirm { get; set; }
         [Required, StringLength(255)]
-        public string Usuario { get; set; } 
+        public string Usuario { get; set; }
         public int ZonaId { get; set; }
     }
 
@@ -155,4 +145,4 @@
             }
         }
     }
- }
+}

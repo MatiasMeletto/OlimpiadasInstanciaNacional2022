@@ -5,14 +5,14 @@
 <h1 class="text-center">Zona Nº @ZonaId</h1>
 
 <br>
-<h4 class="text-decoration-underline">@zona.Nombre</h4>
+<h4 class="text-decoration-underline text-center">@zona.Nombre</h4>
 <br>
 <div class="container-fluid">
 	<div class="row container">
 		@if(pacientes is not null)
 		{
 		<div class="col-4">	
-			<div class="EstiloTabla container">
+				<div style="margin: 0 auto;" class="EstiloTabla container">
 				<table id="tabla1">
 					<thead>
 						<tr>
@@ -37,7 +37,7 @@
 		{
 		<div class="col-4">	
 			<div class="EstiloTabla container">
-				<table id="tabla1">
+					<table style="margin: 0 auto;" id="tabla1">
 					<thead>
 						<tr>
 							<th>Personal</th>
@@ -62,7 +62,7 @@
 		{
 		<div class="col-4">	
 			<div class="EstiloTabla container">
-				<table id="tabla1">
+					<table style="margin: 0 auto;" id="tabla1">
 					<thead>
 						<tr>
 							<th>Llamado</th>
@@ -86,7 +86,7 @@
 <br >
 <br >
 <br >
-<button @onclick="@(() => { navigationManager.NavigateTo("/zonasAreas"); })"> Volver </button>
+<button class="EstiloBtn" @onclick="@(() => { navigationManager.NavigateTo("/zonasAreas"); })"> Volver </button>
 
 @code {
 	[Parameter]
