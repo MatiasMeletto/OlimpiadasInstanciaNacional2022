@@ -10,5 +10,6 @@ namespace CodeBluMovil.StaticLogin
     static class LogIn
     {
         public static string Token { get; set; } 
+        public static string Usuario { get; set; } 
     }
 }
