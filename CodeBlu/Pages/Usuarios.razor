@@ -1,5 +1,90 @@
-﻿@page "/usuarios"
+﻿@inject NavigationManager navigationManager
+@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/usuarios"
+
+@if(usuarios.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Nombre usuario</th>
+                <th>Zona asignada</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (PersonalMedicoViewModel u in usuarios)
+            {
+                <tr>
+                    <td>@u.Nombre</td>
+                    <td>@u.Apellido</td>
+                    <td>@u.DNI</td>
+                    <td>@u.Usuario</td>
+                    <td>@u.ZonaNombre</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1>No hay usuarios</h1>
+}
 
 @code {
+    public class PersonalMedicoViewModel
+    {
+        [Required, StringLength(255)]
+        public string Nombre { get; set; }
+        [Required, StringLength(255)]
+        public string Apellido { get; set; }
+        [Required, StringLength(255)]
+        public string DNI { get; set; }
+        [Required, StringLength(255)]
+        public string Contrasena { get; set; }
+        [Required, StringLength(255)]
+        public string Usuario { get; set; }
+        public int ZonaId { get; set; }
+        public string ZonaNombre { get; set; }
+    }
+    public List<PersonalMedicoViewModel> usuarios = new();
+    public User[]? users;
+    public PersonalMedico[]? personal;
 
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+
+        users = await db.Usuarios.ToArrayAsync();
+        personal = await db.Personal.ToArrayAsync();
+
+        foreach (User u in users)
+        {
+            PersonalMedico? pm = await db.Personal.Include(p => p.Zona).Where(p => p.DNI == u.DNI).SingleOrDefaultAsync();
+
+            if (pm is not null)
+            {
+
+                PersonalMedicoViewModel p = new()
+                {
+                    Apellido = pm.Apellido,
+                    Contrasena = u.Contrasena,
+                    Usuario = u.Usuario,
+                    Nombre = pm.Nombre,
+                    DNI = pm.DNI,
+                    ZonaId = pm.ZonaId,
+                    ZonaNombre = pm.Zona.Nombre
+                };
+
+                usuarios.Add(p);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
 }
