@@ -1,5 +1,12 @@
-﻿@page "/LlamadosDia"
+﻿@inject NavigationManager navigationManager
+@page "/LlamadosDia"
 
 @code {
+    
+	protected override async Task OnInitializedAsync()
+	{
+		if (string.IsNullOrWhiteSpace(LogIn.Token))
+			navigationManager.NavigateTo("/Logueo");
+	}
 
 }

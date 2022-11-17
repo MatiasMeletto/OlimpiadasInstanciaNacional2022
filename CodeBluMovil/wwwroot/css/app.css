@@ -97,8 +97,8 @@ main[b-9y1jfu65u2] {
 }
 
 .top-row[b-9y1jfu65u2] {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
+    background-color: #222222;
+    border-bottom: 1px solid #000000;
     justify-content: flex-end;
     height: 3.5rem;
     display: flex;
@@ -220,4 +220,9 @@ main[b-9y1jfu65u2] {
         display: block;
     }
 }
-
+#buton {
+    border-radius: 10px;
+    outline: none !important;
+    background: #222222;
+    text-decoration: none !important;
+}
