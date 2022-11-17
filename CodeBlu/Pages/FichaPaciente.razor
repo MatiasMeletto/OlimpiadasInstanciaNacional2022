@@ -284,7 +284,7 @@
                 await db.SaveChangesAsync();
 
                 paciente = new();
-                pacientes = await db.Pacientes.ToArrayAsync();
+                pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
                 StateHasChanged();
             }
         }
