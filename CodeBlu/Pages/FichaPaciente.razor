@@ -56,14 +56,18 @@
         <br>
         @if(paciente.Alergia)
         {
+            <label>Detalle alergia:</label>
             <input type="text" @bind="paciente.DetalleAlergia" />
+            <br>
         }
     <label >Medicacion:</label>
     <input  type="checkbox" @bind="paciente.TomaMedicacion"/>
         <br>
         @if (paciente.TomaMedicacion)
         {
+            <label>Detalle medicacion:</label>
             <input type="text"  @bind="paciente.DetalleMedicacion"/>
+            <br>
         }
     <br>
 </div>
@@ -127,6 +131,7 @@
         </div>
 
     }
+    <button @onclick=""></button>
     </div>
     </div>
                 
@@ -155,27 +160,34 @@
         public string MedicoCabecera { get; set; }
         [Required, StringLength(255)]
         public string DiagnosticoIngreso { get; set; }
-        public bool Alergia { get; set; } = false;
+        public bool Alergia { get; set; } 
         [StringLength(255)]
         public string? DetalleAlergia { get; set; }
         [Required, StringLength(255)]
         public string PatologiaBase { get; set; }
-        public bool TomaMedicacion { get; set; } = false;
+        public bool TomaMedicacion { get; set; } 
         public string? DetalleMedicacion { get; set; }
         public int ZonaId { get; set; }
         public int PersonalMedicoId { get; set; }
     }
 
-    public PacienteViewModel paciente { get; set; }
+    public PacienteViewModel paciente { get; set; } = new();
     public PersonalMedico[]? personal { get; set; }
     private Zona[]? zonas { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        paciente.Alergia = false;
+        paciente.TomaMedicacion = false;
+
         using var db = await DbFactory.CreateDbContextAsync();
 
         zonas = await db.Zonas.ToArrayAsync();
         personal = await db.Personal.ToArrayAsync();
     }
+    
+    public async void SubirPaciente()
+    {
 
+    }
 }
