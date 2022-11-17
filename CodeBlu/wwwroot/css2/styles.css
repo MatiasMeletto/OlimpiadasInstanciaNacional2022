@@ -12444,5 +12444,13 @@ body {
 .Centrar{
     text-align:center;
 }
+.ArreglarTexto h4:first-letter {
+    text-transform: uppercase ;
+}
+
+.ArreglarTexto h4 {
+    text-transform: lowercase ;
+}
+
 
 

@@ -38,7 +38,7 @@ else
 }
 <br>
 <br>
-<h5>Crear llamado/reporte</h5>
+	<h5 class="text-decoration-underline">Crear llamado/reporte</h5>
 <label> Tipo de llamado</label>
 <br>
 <select id="selector" @bind="llamado.TipoLlamado">
@@ -53,11 +53,6 @@ else
 	<option value="@TipoOrigenLlamado.Cama">Cama</option>
 </select>
 <br>
-<label>Atendido </label>
-<input type="checkbox" @bind="llamado.Atendido" />
-<br>
-
-
 @if(pacientes is not null)
 {
 	<label> Paciente</label>
@@ -69,6 +64,9 @@ else
 		}
 	</select>
 }
+<br>
+<label>Atendido </label>
+<input type="checkbox" @bind="llamado.Atendido" />
 <br>
 <br>
 <button @onclick="SubirLlamado" >Cargar</button>
