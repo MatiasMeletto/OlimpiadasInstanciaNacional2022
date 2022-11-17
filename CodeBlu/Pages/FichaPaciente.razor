@@ -4,7 +4,52 @@
 
 <h1 class="text-lg-center">Fichas de pacientes</h1>
     <br>
-    
+
+@if (pacientes is not null)
+    {
+        @if (pacientes.Any())
+        {
+            <div class="EstiloTabla container"></div>
+            <table style="margin: 0 auto;" id="tabla1">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>DNI</th>
+                        <th>Dignostico ingreso</th>
+                        <th>Zona</th>
+                        <th>Enfermero a cargo</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Paciente p in pacientes)
+                    {
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td>@p.Apellido</td>
+                            <td>@p.DNI</td>
+                            <td>@p.DiagnosticoIngreso</td>
+                            <td>@p.Zona.Nombre</td>
+                            <td>@p.Personal.Nombre</td>
+                            <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
+                            <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h5>No hay pacientes que mostrar</h5>
+        }
+    }
+    else
+    {
+    <h5>Cargando...</h5>
+    }
+    <br><br>
 <div class="row container">
     <h4 >Crear ficha de paciente</h4>
     <br>
@@ -138,48 +183,7 @@
     <br>
     </div>
     </div>
-    @if (pacientes is not null)
-    {
-        @if (pacientes.Any())
-        {
-            <div class="EstiloTabla container"></div>
-            <table style="margin: 0 auto;" id="tabla1">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>DNI</th>
-                        <th>Dignostico ingreso</th>
-                        <th>Zona</th>
-                        <th>Enfermero a cargo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (Paciente p in pacientes)
-                    {
-                        <tr>
-                            <td>@p.Nombre</td>
-                            <td>@p.Apellido</td>
-                            <td>@p.DNI</td>
-                            <td>@p.DiagnosticoIngreso</td>
-                            <td>@p.Zona.Nombre</td>
-                            <td>@p.Personal.Nombre</td>
-                            <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
-                            <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <h5>No hay pacientes que mostrar</h5>
-        }
-    }
-    else
-    {
-    <h5>Cargando...</h5>
-    }
+    
                 
 @code {
     public class PacienteViewModel

@@ -1,10 +1,14 @@
 ﻿@inject NavigationManager navigationManager
 @inject IDbContextFactory<CodeBluingDbContext> DbFactory
 @page "/usuarios"
+<div class="container-fluid">
+<h1 class="text-lg-center">Usuarios Activos</h1>
+<br>
+<br>
 
 @if(usuarios.Any())
 {
-    <table>
+    <table style="margin: 0 auto;" id="tabla1">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -33,7 +37,7 @@ else
 {
     <h1>No hay usuarios</h1>
 }
-
+</div>
 @code {
     public class PersonalMedicoViewModel
     {
