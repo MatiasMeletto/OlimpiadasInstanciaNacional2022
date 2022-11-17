@@ -119,7 +119,7 @@
         <div class="row mb-3">
             <div class="col-md-12">
                 <label for="selector1"> Personal a cargo: </label>
-                <select id="selector1" @bind="paciente.ZonaId">
+                <select id="selector1" @bind="paciente.PersonalMedicoId">
                     <option selected value="0">-Seleccione un enfermero/a-</option>
                     @foreach (PersonalMedico p in personal)
                     {
@@ -131,9 +131,52 @@
         </div>
 
     }
-    <button @onclick=""></button>
+    <button @onclick="SubirPaciente">Crear</button>
+    <br>
+    <br>
+    <br>
     </div>
     </div>
+    @if (pacientes is not null)
+    {
+        @if (pacientes.Any())
+        {
+            <div class="EstiloTabla container"></div>
+            <table style="margin: 0 auto;" id="tabla1">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>DNI</th>
+                        <th>Dignostico ingreso</th>
+                        <th>Zona</th>
+                        <th>Enfermero a cargo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Paciente p in pacientes)
+                    {
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td>@p.Apellido</td>
+                            <td>@p.DNI</td>
+                            <td>@p.DiagnosticoIngreso</td>
+                            <td>@p.Zona.Nombre</td>
+                            <td>@p.Personal.Nombre</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h5>No hay pacientes que mostrar</h5>
+        }
+    }
+    else
+    {
+    <h5>Cargando...</h5>
+    }
                 
 @code {
     public class PacienteViewModel
@@ -168,12 +211,15 @@
         public bool TomaMedicacion { get; set; } 
         public string? DetalleMedicacion { get; set; }
         public int ZonaId { get; set; }
+        public string Zona { get; set; }
         public int PersonalMedicoId { get; set; }
+        public string PersonalMedico { get; set; }
     }
 
+    public Paciente[]? pacientes;
     public PacienteViewModel paciente { get; set; } = new();
-    public PersonalMedico[]? personal { get; set; }
-    private Zona[]? zonas { get; set; }
+    public PersonalMedico[]? personal;
+    private Zona[]? zonas;
 
     protected override async Task OnInitializedAsync()
     {
@@ -184,10 +230,63 @@
 
         zonas = await db.Zonas.ToArrayAsync();
         personal = await db.Personal.ToArrayAsync();
+        pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
     }
-    
+
     public async void SubirPaciente()
     {
+        if (paciente.ZonaId != 0
+            && paciente.PersonalMedicoId != 0
+            && !string.IsNullOrWhiteSpace(paciente.Apellido)
+            && !string.IsNullOrWhiteSpace(paciente.ContactoEmergencia)
+            && !string.IsNullOrWhiteSpace(paciente.Nombre)
+            && !string.IsNullOrWhiteSpace(paciente.DNI)
+            && !string.IsNullOrWhiteSpace(paciente.MedicoCabecera)
+            && !string.IsNullOrWhiteSpace(paciente.PatologiaBase)
+            && !string.IsNullOrWhiteSpace(paciente.TipoSangre)
+            && !string.IsNullOrWhiteSpace(paciente.NAfilidado)
+            && !string.IsNullOrWhiteSpace(paciente.ObraSocial)
+            && !string.IsNullOrWhiteSpace(paciente.DiagnosticoIngreso)
+            && paciente.Edad != 0
+        )
+        {
+            using var db = await DbFactory.CreateDbContextAsync();
 
+            Paciente? comprobante = await db.Pacientes.Where(p => p.DNI == paciente.DNI).SingleOrDefaultAsync();
+
+            if (comprobante is null)
+            {
+                Paciente p = new()
+                {
+                    Alergia = paciente.Alergia,
+                    Apellido = paciente.Apellido,
+                    Asma = paciente.Asma,
+                    ContactoEmergencia = paciente.ContactoEmergencia,
+                    DetalleAlergia = paciente.DetalleAlergia,
+                    DetalleMedicacion = paciente.DetalleMedicacion,
+                    DiagnosticoIngreso = paciente.DiagnosticoIngreso,
+                    Edad = paciente.Edad,
+                    DNI = paciente.DNI,
+                    FechaNacimiento = paciente.FechaNacimiento,
+                    MedicoCabecera = paciente.MedicoCabecera,
+                    ObraSocial = paciente.ObraSocial,
+                    NAfiliado = paciente.NAfilidado,
+                    Nombre = paciente.Nombre,
+                    PatologiaBase = paciente.PatologiaBase,
+                    TipoSangre = paciente.TipoSangre,
+                    TuvoVaricela = paciente.TuvoVaricela,
+                    ZonaId = paciente.ZonaId,
+                    PersonalMedicoId = paciente.PersonalMedicoId,
+                    TomaMedicacion = paciente.TomaMedicacion,
+                };
+
+                await db.Pacientes.AddAsync(p);
+                await db.SaveChangesAsync();
+
+                paciente = new();
+                pacientes = await db.Pacientes.ToArrayAsync();
+                StateHasChanged();
+            }
+        }
     }
 }
