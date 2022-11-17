@@ -57,6 +57,7 @@
         @if(paciente.Alergia)
         {
             <label>Detalle alergia:</label>
+            <br>
             <input type="text" @bind="paciente.DetalleAlergia" />
             <br>
         }
@@ -66,6 +67,7 @@
         @if (paciente.TomaMedicacion)
         {
             <label>Detalle medicacion:</label>
+            <br>
             <input type="text"  @bind="paciente.DetalleMedicacion"/>
             <br>
         }
@@ -130,7 +132,7 @@
             </div>
         </div>
     }
-    <button @onclick="SubirPaciente">Crear</button>
+    <button class="EstiloBtn"@onclick="SubirPaciente">Crear</button>
     <br>
     <br>
     <br>
