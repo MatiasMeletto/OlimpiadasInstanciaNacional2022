@@ -2,44 +2,90 @@
 @inject IDbContextFactory<CodeBluingDbContext> DbFactory
 @page "/zonasAreas/inspZona/{ZonaId:int?}"
 
-<h1>Zona ID nº @ZonaId</h1>
+<h1 class="text-center">Zona Nº @ZonaId</h1>
 
-<br />
-<label>@zona.Nombre</label>
-<br />
-<br />
-<br />
-@if(pacientes is not null)
-{
-	<label>Pacientes</label>
-	@foreach(Paciente p in pacientes)
-	{
-		<lablel>@p.Nombre  @p.Apellido</lablel>
-	}
-}
-<br />
-<br />
-@if(personal is not null)
-{
-	<label>personal</label>
-	@foreach(PersonalMedico p in personal)
-	{
-		<lablel>@p.Nombre  @p.Apellido</lablel>
-	}
-}
-<br />
-<br />
-@if(llamados is not null)
-{
-	<label>Llamados</label>
-	@foreach(Llamado l in llamados)
-	{
-		<lablel>@l.TipoLlamado @l.Atendido @l.Paciente.Apellido</lablel>
-	}
-}
-<br />
-<br />
-<br />
+<br>
+<h4 class="text-decoration-underline">@zona.Nombre</h4>
+<br>
+<div class="container-fluid">
+	<div class="row container">
+		@if(pacientes is not null)
+		{
+		<div class="col-4">	
+			<div class="EstiloTabla container">
+				<table id="tabla1">
+					<thead>
+						<tr>
+							<th>Pacientes</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@foreach (Paciente p in pacientes)
+						{
+							<tr>
+								<td>@p.Nombre  @p.Apellido</td>			
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		}
+
+		@if(personal is not null)
+		{
+		<div class="col-4">	
+			<div class="EstiloTabla container">
+				<table id="tabla1">
+					<thead>
+						<tr>
+							<th>Personal</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@foreach (PersonalMedico p in personal)
+						{
+							<tr>
+								<td>@p.Nombre  @p.Apellido</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>	
+		}
+
+
+		@if(llamados is not null)
+		{
+		<div class="col-4">	
+			<div class="EstiloTabla container">
+				<table id="tabla1">
+					<thead>
+						<tr>
+							<th>Llamado</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@foreach (Llamado l in llamados)
+						{
+							<tr>
+								<td>@l.TipoLlamado @l.Atendido @l.Paciente.Apellido</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		}
+	</div>
+</div>
+<br >
+<br >
+<br >
 <button @onclick="@(() => { navigationManager.NavigateTo("/zonasAreas"); })"> Volver </button>
 
 @code {

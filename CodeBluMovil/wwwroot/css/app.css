@@ -226,3 +226,15 @@ main[b-9y1jfu65u2] {
     background: #222222;
     text-decoration: none !important;
 }
+#tabla1 {
+    width: 100%;
+    border: 1px solid #000;
+}
+    #tabla1 th, td {
+        width: 25%;
+        text-align: left;
+        vertical-align: top;
+        border: 1px solid #000;
+        border-spacing: 0;
+    }
+

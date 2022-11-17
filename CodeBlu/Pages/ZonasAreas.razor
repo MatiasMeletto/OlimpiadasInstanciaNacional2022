@@ -6,10 +6,11 @@
 <br>
 @if(zonas is not null)
 {
-    <table>
+    <div class="EstiloTabla container"></div>
+    <table id="tabla1">
         <thead>
             <tr>
-                <th>ID</th> <th>Nombre</th> <th>Cant. Personal</th> <th>Cant. Pacientes</th><th>Cant llamados</th>
+                <th>N°</th> <th>Nombre</th> <th>Cant. Personal</th> <th>Cant. Pacientes</th><th>Cant llamados</th><th></th>
             </tr>
         </thead>
         <tbody>
@@ -40,17 +41,19 @@ else
     <br>
     <br>
     @*Si se da clic en el boton, creando (variable de comprobacion que muestra o no esta parte) se vuelve verdadero y manda a re renderizar la pag*@
-    <button @onclick="@(() => { creando = true; StateHasChanged(); })"> Crear una nueva area / zona</button>
+    <button class="EstiloBtn" @onclick="@(() => { creando = true; StateHasChanged(); })"> Crear una nueva area / zona</button>
 }
 
 
 @if(creando)
 {
-    <input type="text" @bind="zona.Nombre" />
+    <input class="EstiloInp" type="text" @bind="zona.Nombre" />
     
     @*La parte de crear es simple, solo un input que diga el nombre y luego 2 botnoes, uno de crear y otro de cancelar, ambos mandan a re renderizar la pag*@
-    <button @onclick="@(() => { creando = false; SubirZona(); })"> Crear </button>
-    <button @onclick="@(() => { creando = false; StateHasChanged(); })"> Cancelar </button>
+    <label>   </label>
+    <button class="EstiloBtn" @onclick="@(() => { creando = false; SubirZona(); })"> Crear </button>
+    <label>  </label>
+    <button class="EstiloBtn" @onclick="@(() => { creando = false; StateHasChanged(); })"> Cancelar </button>
 }
 
 @code {
