@@ -1,4 +1,5 @@
 ﻿
+using CodeBluMovil.Services;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace CodeBluMovil
@@ -17,9 +18,10 @@ namespace CodeBluMovil
 
             builder.Services.AddMauiBlazorWebView();
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 
+            builder.Services.AddScoped<ILoginService, LoginService>();
 
             return builder.Build();
         }

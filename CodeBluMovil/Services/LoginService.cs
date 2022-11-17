@@ -5,21 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Android.Gestures;
+
 using CodeBluCore;
 using CodeBluMovil.StaticLogin;
-using static Android.Content.ClipData;
+
 
 namespace CodeBluMovil.Services
 {
-    public class LoginService
+    public class LoginService : ILoginService
     {
         HttpClient _client;
         JsonSerializerOptions _serializerOptions;
 
-        private const string userUrl = "http://localhost:7144/api/Users";
-
-        public bool Auth { get; private set; }
+        private const string userUrl = "https://localhost:7144/api/Users";
 
         public LoginService()
         {
@@ -31,7 +29,7 @@ namespace CodeBluMovil.Services
             };
         }
 
-        public async Task AutenticacionManual(UserDTO user)
+        public async Task<bool> AutenticacionManual(UserDTO user)
         {
             Uri uri = new Uri(string.Format(userUrl, string.Empty));
 
@@ -47,11 +45,15 @@ namespace CodeBluMovil.Services
                 {
                     LogIn.Token = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(@"\tAccount succefully autenticathed.");
+
+                    return true;
                 }
+                return false;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                return false;
             }
         }
     }

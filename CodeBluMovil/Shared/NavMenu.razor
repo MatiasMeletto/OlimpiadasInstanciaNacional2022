@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject NavigationManager navigationManager
+
+<div class="top-row ps-3 navbar navbar-dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="">Clínica Neuquén</a>
 		<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -24,6 +26,7 @@
 				<span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
 			</NavLink>
 		</div>
+		<button type="button" @onclick="CerrarSesion">Cerrar sesion</button>
 	</nav>
 </div>
 
@@ -36,4 +39,11 @@
 	{
 		collapseNavMenu = !collapseNavMenu;
 	}
+
+	private void CerrarSesion()
+	{
+		LogIn.Token = null;
+		navigationManager.NavigateTo("/Logueo");
+	}
+
 }

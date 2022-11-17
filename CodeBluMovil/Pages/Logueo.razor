@@ -1,4 +1,6 @@
-﻿@page "/Logueo"
+﻿@inject NavigationManager navigationManager
+@inject ILoginService logIn
+@page "/Logueo"
 
 <div id="layoutAuthentication">
     <div id="layoutAuthentication_content">
@@ -11,11 +13,11 @@
                             <div class="card-body">
                                 <form>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-                                        <label for="inputEmail">Correo electrónico</label>
+                                        <input class="form-control" @bind="User.Usuario" type="text" />
+                                        <label for="inputEmail">Usuario</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                        <input class="form-control" @bind="User.Contrasena" type="password" />
                                         <label for="inputPassword">Contraseña</label>
                                     </div>
                                     <div class="form-check mb-3">
@@ -24,12 +26,9 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                         <a class="small" href="ContraseñaOlvidada">Olvidaste la contraseña?</a>
-                                        <a class="btn btn-primary" href="index.html">Entrar</a>
+                                        <a class="btn btn-primary" @onclick="ComprobarUsuario">Entrar</a>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="card-footer text-center py-3">
-                                <div class="small"><a href="register.html">No tienes cuenta? Registrate!</a></div>
                             </div>
                         </div>
                     </div>
@@ -52,3 +51,15 @@
         </footer>
     </div>
 </div>
+
+@code {
+    private UserDTO User { get; set; } = new();
+    private bool comprobante = false;
+
+    private async void ComprobarUsuario()
+    {
+        comprobante = await logIn.AutenticacionManual(User);
+        if (comprobante)
+            navigationManager.NavigateTo("/");
+    }
+}
