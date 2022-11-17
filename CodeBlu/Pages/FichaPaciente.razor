@@ -1,4 +1,7 @@
-﻿@page "/fichaPaciente"
+﻿@inject NavigationManager navigationManager
+@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/fichaPaciente"
+
 <h1 class="text-lg-center">Fichas de pacientes</h1>
     <br>
     
@@ -12,53 +15,56 @@
 
     <label >Nombre:</label>
     <br>
-    <input  type="text"  />
+    <input  type="text"  @bind="paciente.Nombre"/>
     <br>
     <label >Apellido:</label>
         <br>
-    <input  type="text" />
+        <input type="text"  @bind="paciente.Apellido" />
     <br>
     <label >DNI:</label>
     <br>
-    <input  type="text" />
+    <input  type="text" @bind="paciente.DNI" />
     <br>
     <label >Tipo de sangre:</label>
         <br>
-    <input  type="text" />
+    <input  type="text" @bind="paciente.TipoSangre" />
     <br>
     <label >Contacto de emergencia:</label>
         <br>
-    <input  type="text"  />
+    <input  type="text" @bind="paciente.ContactoEmergencia"  />
     <br>
     <label >Fecha de nacimiento:</label>
         <br>
-    <input  type="text"  />
+    <input  type="datetime"  @bind="paciente.FechaNacimiento" />
     <br>
     <label >Edad:</label>
         <br>
-    <input  type="text"  />
+    <input  type="number"  @bind="paciente.Edad" />
     <br>
     <br>
     </div>
     <div class="col-lg-4">
     <h6 id="TituloF">Antecedentes</h6>
     <label >Asma:</label>
-    <input  type="checkbox"  />
+    <input  type="checkbox"  @bind="paciente.Asma" />
         <br>
     <label >Varicela:</label>
-    <input  type="checkbox"  />
+    <input  type="checkbox"  @bind="paciente.TuvoVaricela" />
     <br>
     <label >Alergia:</label>
-    <input  type="checkbox"  />
+    <input  type="checkbox"  @bind="paciente.Alergia" />
         <br>
-        @*Aca iria el select para cuando este el bool en true*@
+        @if(paciente.Alergia)
+        {
+            <input type="text" @bind="paciente.DetalleAlergia" />
+        }
     <label >Medicacion:</label>
-    <input  type="checkbox"/>
+    <input  type="checkbox" @bind="paciente.TomaMedicacion"/>
         <br>
-        <label >Detalles de antecedentes:</label>
-        <br>
-        <input  type="text" />
-    @*Aca iria el select para cuando este el bool en true*@
+        @if (paciente.TomaMedicacion)
+        {
+            <input type="text"  @bind="paciente.DetalleMedicacion"/>
+        }
     <br>
 </div>
     <div class="col-lg-4">
@@ -66,39 +72,61 @@
 
     <label >Obra social:</label>
         <br>
-    <input  type="text" />
+    <input  type="text"  @bind="paciente.ObraSocial"/>
     <br>
     <label >N° de afiliado:</label>
         <br>
-    <input  type="text" />
+    <input  type="text"  @bind="paciente.NAfilidado"/>
     <br>
     <label >Medico de cabecera:</label>
         <br>
-    <input  type="text" />
+    <input  type="text"  @bind="paciente.MedicoCabecera"/>
     <br>
     <label >Diagnostico de ingreso:</label>
         <br>
-    <input  type="text" />
+    <input  type="text"  @bind="paciente.DiagnosticoIngreso"/>
     <br>
     <label >Patologia base:</label>
         <br>
-    <input  type="text" />
+    <input  type="text"  @bind="paciente.PatologiaBase"/>
     <br>
     <br>
-    <label>
-        Zona: 
-        <select name="Zona">
-        <option value="mayi muy gay">Mayi gay</option>
-        </select>
-    </label>
+    @if (zonas is not null)
+    {
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="selector1"> Zona: </label>
+                <select id="selector1" @bind="paciente.ZonaId">
+                    <option selected value="0">-Seleccione una zona-</option>
+                    @foreach (Zona z in zonas)
+                    {
+                        <option value="@z.ZonaId">@z.Nombre</option>
+                    }
+                </select>
+
+            </div>
+        </div>
+
+    }
     <br>
     <br>
-    <label>
-        Enfermero asignado:
-        <select name="Enfermero">
-            <option value="mayi muy gay">Mayi gay</option>
-        </select>
-    </label>
+    @if (personal is not null)
+    {
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="selector1"> Personal a cargo: </label>
+                <select id="selector1" @bind="paciente.ZonaId">
+                    <option selected value="0">-Seleccione un enfermero/a-</option>
+                    @foreach (PersonalMedico p in personal)
+                    {
+                        <option value="@p.PersonalMedicoId">@p.Nombre  @p.Apellido</option>
+                    }
+                </select>
+
+            </div>
+        </div>
+
+    }
     </div>
     </div>
                 
@@ -122,15 +150,32 @@
         [Required, StringLength(255)]
         public string ObraSocial { get; set; }
         [Required, StringLength(255)]
+        public string NAfilidado { get; set; }
+        [Required, StringLength(255)]
         public string MedicoCabecera { get; set; }
         [Required, StringLength(255)]
         public string DiagnosticoIngreso { get; set; }
-        public bool Alergia { get; set; } 
+        public bool Alergia { get; set; } = false;
         [StringLength(255)]
         public string? DetalleAlergia { get; set; }
         [Required, StringLength(255)]
-        public string PatologiaBase { get; set; } 
-        public bool TomaMedicacion { get; set; } 
+        public string PatologiaBase { get; set; }
+        public bool TomaMedicacion { get; set; } = false;
         public string? DetalleMedicacion { get; set; }
+        public int ZonaId { get; set; }
+        public int PersonalMedicoId { get; set; }
     }
+
+    public PacienteViewModel paciente { get; set; }
+    public PersonalMedico[]? personal { get; set; }
+    private Zona[]? zonas { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+
+        zonas = await db.Zonas.ToArrayAsync();
+        personal = await db.Personal.ToArrayAsync();
+    }
+
 }

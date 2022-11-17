@@ -29,6 +29,8 @@ namespace CodeBlu.Data.Models
         [Required, StringLength(255)]
         public string ObraSocial { get; set; }
         [Required, StringLength(255)]
+        public string NAfiliado { get; set; }
+        [Required, StringLength(255)]
         public string MedicoCabecera { get; set; } // medico de cabecera
         [Required, StringLength(255)]
         public string DiagnosticoIngreso { get; set; } //razon por la que fue ingresado en el hospital en primera instancia
