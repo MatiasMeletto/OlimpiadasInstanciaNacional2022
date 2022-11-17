@@ -50,9 +50,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Pages\Counter.razor">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </Content>
       <Content Update="Pages\Index.razor">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
@@ -63,9 +60,6 @@
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
       <Content Update="Pages\Logueo.razor">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </Content>
-      <Content Update="Pages\Registro.razor">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
     </ItemGroup>

@@ -1,49 +1,61 @@
 ﻿@inject NavigationManager navigationManager
 
 <div class="top-row ps-3 navbar navbar-dark">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="">Clínica Neuquén</a>
-		<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-	</div>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Clínica Neuquén</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-	<nav class="flex-column">
-		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="LlamadosGenereales" Match="NavLinkMatch.All">
-				<span class="oi oi-home" aria-hidden="true"></span> Llamados generales.
-			</NavLink>
-		</div>
-		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="LlamadosDia">
-				<span class="oi oi-plus" aria-hidden="true"></span> Llamados del dia.
-			</NavLink>
-		</div>
-		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="fetchdata">
-				<span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-			</NavLink>
-		</div>
-		<button type="button" @onclick="CerrarSesion">Cerrar sesion</button>
-	</nav>
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="LlamadosGenereales" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Llamados generales.
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="LlamadosDia">
+                <span class="oi oi-plus" aria-hidden="true"></span> Llamados del dia.
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="fetchdata">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            </NavLink>
+        </div>
+        
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        <div class="nav-item px-3">
+            <a class="nav-item" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                <button id="buton" class="text-light border-0 text-decoration-none" type="button" @onclick="CerrarSesion"><i class="fas fa-sign-in-alt"></i>Cerrar sesion</button>
+            </a>
+        </div>
+    </nav>
 </div>
 
 @code {
-	private bool collapseNavMenu = true;
+    private bool collapseNavMenu = true;
 
-	private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-	private void ToggleNavMenu()
-	{
-		collapseNavMenu = !collapseNavMenu;
-	}
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
 
-	private void CerrarSesion()
-	{
-		LogIn.Token = null;
-		navigationManager.NavigateTo("/Logueo");
-	}
+    private void CerrarSesion()
+    {
+        LogIn.Token = null;
+        navigationManager.NavigateTo("/Logueo");
+    }
 
 }
