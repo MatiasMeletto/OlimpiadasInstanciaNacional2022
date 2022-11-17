@@ -67,3 +67,19 @@
         </footer>
     </div>
 </div>
+
+ @code{
+     public class PersonalMedicoViewModel
+     {
+        [Required, StringLength(255)]
+        public string Nombre { get; set; }
+        [Required, StringLength(255)]
+        public string Apellido { get; set; }
+        [Required, StringLength(255)]
+        public string DNI { get; set; }
+        [Required, StringLength(255)]
+        public string Contrasena { get; set; } 
+        [Required, StringLength(255)]
+        public string Usuario { get; set; } 
+     }
+ }
