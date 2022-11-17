@@ -56,6 +56,9 @@
             </div>
         </main>
     </div>
+    <div class="row justify-content-center">
+        <label>*Recuerde que para crear un usuario es necesario que existan zonas*</label>
+    </div>
     <div id="layoutAuthentication_footer">
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
@@ -72,9 +75,9 @@
     </div>
 </div>
 
- @code{
-     public class PersonalMedicoViewModel
-     {
+@code{
+    public class PersonalMedicoViewModel
+    {
         [Required, StringLength(255)]
         public string Nombre { get; set; }
         [Required, StringLength(255)]
@@ -85,7 +88,8 @@
         public string Contrasena { get; set; } 
         [Required, StringLength(255)]
         public string Usuario { get; set; } 
-     }
+        public int ZonaId { get; set; }
+    }
 
      public async void CrearUsuarioYPersonal()
      {
