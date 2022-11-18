@@ -12,14 +12,20 @@
 
 						@foreach (LlamadoDTO l in LlamadosService.Llamados)
 						{
-							<div class="card-header"><h3 class="text-center font-weight-light my-4">Origen del llamado: </h3>@l.OrigenLlamado.ToString()</div>
+							<div class="card-header"><h3 class="text-center font-weight-light my-4"> </h3>@l.OrigenLlamado.ToString()</div>
 							<div class="card-body">
 								Tipo de llamado: @l.TipoLlamado.ToString()
+								<br>
 								Atendido: @l.Atendido
+								<br>
 								Fecha y hora de origen: @l.FechaHora
+								<br>
 								Fecha y hora de atendido: @l.HoraAtendido
+								<br>
 								Zona: @l.Zona
+										<br>
 								Paciente: @l.Paciente
+								<br>
 								Quien atendio: @l.Personal
 							</div>
 						}
