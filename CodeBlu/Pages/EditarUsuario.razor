@@ -187,6 +187,7 @@
 								DNI = personalView.DNI,
 								ZonaId = personalView.ZonaId,
 							};
+						await db.AddAsync(p);
 					}
 					User? u = await db.Usuarios.Where(u => u.DNI == personalView.DNI).SingleOrDefaultAsync();
 
@@ -207,10 +208,9 @@
 								DNI = personalView.DNI,
 								Rol = personalView.Rol
 							};
+						await db.AddAsync(u);
 					}
 					//guarda en la base de datos y guarda cambios
-					await db.AddAsync(p);
-					await db.AddAsync(u);
 					db.SaveChanges();
 
 					//vuelve a la pestaña anterior
