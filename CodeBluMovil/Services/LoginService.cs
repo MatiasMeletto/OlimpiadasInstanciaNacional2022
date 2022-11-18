@@ -45,7 +45,7 @@ namespace CodeBluMovil.Services
                 {
                     LogIn.Token = await response.Content.ReadAsStringAsync();
                     LogIn.Usuario = user.Usuario;
-                    LogIn.Rol = user.Rol;
+                    LogIn.Rol = user.Rol.ToString();
                     Debug.WriteLine(@"\tAccount succefully autenticathed.");
 
                     return true;

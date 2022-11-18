@@ -53,19 +53,29 @@
                                     {
                                         <div class="row mb-3">
                                             <div class="col-md-12">
-                                               <label for="selector1"> Zona: </label>
-                                                <select  id="selector1" @bind="personal.ZonaId">
-                                                        <option selected value="0">-Seleccione una zona-</option>
-                                                        @foreach (Zona z in zonas)
-                                                        {
-                                                            <option value="@z.ZonaId">@z.Nombre</option>
-                                                        }
-                                                    </select>
-                                                
+                                                <label for="selector1"> Zona: </label>
+                                                <select id="selector1" @bind="personal.ZonaId">
+                                                    <option selected value="0">-Seleccione una zona-</option>
+                                                    @foreach (Zona z in zonas)
+                                                    {
+                                                        <option value="@z.ZonaId">@z.Nombre</option>
+                                                    }
+                                                </select>
+
                                             </div>
-                                            </div>
-                                     
+                                        </div>
+
                                     }
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label for="selector1"> Rol: </label>
+                                            <select id="selector1" @bind="personal.Rol">
+                                                <option selected value="@TipoRol.Otro">-Seleccione un rol-</option>
+                                                <option value="@TipoRol.Generico">Generico</option>
+                                                <option value="@TipoRol.Administrador">Administrador</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="mt-4 mb-0">
                                         <div class="d-grid"><a class="btn btn-primary btn-block" @onclick="CrearUsuarioYPersonal">Crear</a></div>
                                     </div>
@@ -97,6 +107,7 @@
         public string ContrasenaConfirm { get; set; }
         [Required, StringLength(255)]
         public string Usuario { get; set; }
+        public TipoRol Rol { get; set; }
         public int ZonaId { get; set; }
     }
 
@@ -112,7 +123,7 @@
 
     public async void CrearUsuarioYPersonal()
     {
-        if (personal.ZonaId != 0 && !string.IsNullOrWhiteSpace(personal.Apellido) && !string.IsNullOrWhiteSpace(personal.Nombre) && !string.IsNullOrWhiteSpace(personal.Contrasena) && !string.IsNullOrWhiteSpace(personal.ContrasenaConfirm) && !string.IsNullOrWhiteSpace(personal.DNI) && !string.IsNullOrWhiteSpace(personal.Usuario))
+        if (personal.ZonaId != 0 && !string.IsNullOrWhiteSpace(personal.Apellido) && !string.IsNullOrWhiteSpace(personal.Nombre) && !string.IsNullOrWhiteSpace(personal.Contrasena) && !string.IsNullOrWhiteSpace(personal.ContrasenaConfirm) && !string.IsNullOrWhiteSpace(personal.DNI) && !string.IsNullOrWhiteSpace(personal.Usuario) && personal.Rol != 0)
         {
             using var db = await DbFactory.CreateDbContextAsync();
 
@@ -133,7 +144,8 @@
                     {
                         Contrasena = personal.Contrasena,
                         Usuario = personal.Usuario,
-                        DNI = personal.DNI
+                        DNI = personal.DNI,
+                        Rol = personal.Rol
                     };
 
                 await db.Personal.AddAsync(p);

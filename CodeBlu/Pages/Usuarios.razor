@@ -18,6 +18,7 @@
                     <th>DNI</th>
                     <th>Nombre usuario</th>
                     <th>Zona asignada</th>
+                    <th>Rol</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                         <td>@u.DNI</td>
                         <td>@u.Usuario</td>
                         <td>@u.ZonaNombre</td>
+                        <td>@u.Rol</td>
                     </tr>
                 }
             </tbody>
@@ -58,6 +60,7 @@ else
         public string Contrasena { get; set; }
         [Required, StringLength(255)]
         public string Usuario { get; set; }
+        public TipoRol Rol { get; set; }
         public int ZonaId { get; set; }
         public string ZonaNombre { get; set; }
     }
@@ -87,7 +90,8 @@ else
                     Nombre = pm.Nombre,
                     DNI = pm.DNI,
                     ZonaId = pm.ZonaId,
-                    ZonaNombre = pm.Zona.Nombre
+                    ZonaNombre = pm.Zona.Nombre,
+                    Rol = u.Rol
                 };
 
                 usuarios.Add(p);
