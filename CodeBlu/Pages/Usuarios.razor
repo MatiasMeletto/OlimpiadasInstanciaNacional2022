@@ -1,41 +1,48 @@
 ﻿@inject NavigationManager navigationManager
 @inject IDbContextFactory<CodeBluingDbContext> DbFactory
 @page "/usuarios"
+
 <div class="container-fluid">
 <h1 class="text-lg-center">Usuarios Activos</h1>
 <br>
 <br>
-
-@if(usuarios.Any())
+@if(usuarios is not null)
 {
-    <table style="margin: 0 auto;" id="tabla1">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>DNI</th>
-                <th>Nombre usuario</th>
-                <th>Zona asignada</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (PersonalMedicoViewModel u in usuarios)
-            {
+    @if(usuarios.Any())
+    {
+        <table style="margin: 0 auto;" id="tabla1">
+            <thead>
                 <tr>
-                    <td>@u.Nombre</td>
-                    <td>@u.Apellido</td>
-                    <td>@u.DNI</td>
-                    <td>@u.Usuario</td>
-                    <td>@u.ZonaNombre</td>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>Nombre usuario</th>
+                    <th>Zona asignada</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+
+                @foreach (PersonalMedicoViewModel u in usuarios)
+                {
+                    <tr>
+                        <td>@u.Nombre</td>
+                        <td>@u.Apellido</td>
+                        <td>@u.DNI</td>
+                        <td>@u.Usuario</td>
+                        <td>@u.ZonaNombre</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3 class="text-center">Cargando...</h3>
+    }
 }
 else
 {
-    <h1>No hay usuarios</h1>
+    <h3 class="text-center">No hay usuarios</h3>
 }
 </div>
 @code {

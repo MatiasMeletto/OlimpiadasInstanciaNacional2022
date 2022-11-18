@@ -1,170 +1,263 @@
 ﻿@inject IDbContextFactory<CodeBluingDbContext> DbFactory
 @inject NavigationManager navigationManager
+@inject IJSRuntime JS
 @page "/llamados"
+@using CodeBlu.Helpers
+
 <div class="container-fluid">
-	<div class="Centrar container">
-		@if (llamados is not null)
-		{
-			<div class="EstiloTabla container"></div>
-			<table style="margin: 0 auto;" id="tabla1">
-				<thead>
-					<tr>
-						<th>Tipo de llamado</th>
-						<th>Origen del llamado</th>
-						<th>Atendido</th>
-						<th>Fecha y hora de origen</th>
-						<th>Fecha y hora de atendido</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (Llamado l in llamados)
-					{
-						<tr>
-							<td>@l.TipoLlamado.ToString()</td>
-							<td>@l.OrigenLlamado.ToString()</td>
-							<td>@l.Atendido</td>
-							<td>@l.FechaHora</td>
-							<td>@l.HoraAtendido</td>
-						</tr>
-					}
-				</tbody>
-			</table>
-		}
-		else
-		{
-			<label>Cargando...</label>
-		}
-		<br>
-		<br>
-		<h5 class="text-decoration-underline">Crear llamado/reporte</h5>
-		<label> Tipo de llamado</label>
-		<br>
-		<select id="selector" @bind="llamado.TipoLlamado">
-			<option value="@TipoLlamado.Emergencia">Emergencia</option>
-			<option value="@TipoLlamado.Normal">Normal</option>
-		</select>
-		<br>
-		<label> Origen de llamado</label>
-		<br>
-		<select id="selector" @bind="llamado.OrigenLlamado">
-			<option value="@TipoOrigenLlamado.Banio">Baño</option>
-			<option value="@TipoOrigenLlamado.Cama">Cama</option>
-		</select>
-		<br>
-		@if (pacientes is not null)
-		{
-			<label> Paciente</label>
-			<br>
-			<select id="selector" @bind="llamado.PacienteId">
-				@foreach (Paciente p in pacientes)
-				{
-					<option value="@p.PacienteId">@p.Nombre  @p.Apellido</option>
-					<br>
-				}
-			</select>
-		}
-		<br>
-		@if (personal is not null)
-		{
-			<div class="row mb-3">
-				<div class="col-md-12">
-					<label for="selector1"> Personal a cargo: </label>
-					<br>
-					<select id="selector1" @bind="llamado.PersonalMedicoId">
-						<option selected value="0">-Seleccione un enfermero/a-</option>
-						@foreach (PersonalMedico p in personal)
-						{
-							<option value="@p.PersonalMedicoId">@p.Nombre  @p.Apellido</option>
-						}
-					</select>
+    <div class="Centrar container">
+        <label>Filtros:  </label>
+        <select id="selector" @onclick="Filtrar" @bind="filtros.OrigenLlamado">
+            <option selected value="@TipoOrigenLlamado.Otro">-Seleccione un origen del llamado-</option>
+            <option value="@TipoOrigenLlamado.Banio">Baño</option>
+            <option value="@TipoOrigenLlamado.Cama">Cama</option>
+        </select>
+        <label>   </label>
+        <select id="selector" @onclick="Filtrar" @bind="filtros.TipoLlamado">
+            <option selected value="@TipoLlamado.Otro">-Seleccione un tipo de llamado-</option>
+            <option value="@TipoLlamado.Emergencia">Emergencia</option>
+            <option value="@TipoLlamado.Normal">Normal</option>
+        </select>
+        <br />
+        @if (llamados is not null)
+        {
+            @if (llamados.Any())
+            {
+                <div class="EstiloTabla container"></div>
+                <table style="margin: 0 auto;" id="tabla1">
+                    <thead>
+                        <tr>
+                            <th>Tipo de llamado</th>
+                            <th>Origen del llamado</th>
+                            <th>Atendido</th>
+                            <th>Fecha y hora de origen</th>
+                            <th>Fecha y hora de atendido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Llamado l in llamados)
+                        {
+                            <tr>
+                                <td>@l.TipoLlamado.ToString()</td>
+                                <td>@l.OrigenLlamado.ToString()</td>
+                                <td>@l.Atendido</td>
+                                <td>@l.FechaHora</td>
+                                <td>@l.HoraAtendido</td>
+                                <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
+                                <td><button class="btn-dark" @onclick="@(() => { int i = l.LlamadoId; ExportarCsv(i); })"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <label>Cargando...</label>
+            }
+        }
+        else
+        {
+            <h3 class="text-center">No hay llamados</h3>
+        }
+        <br>
+        <br>
+        <h5 class="text-decoration-underline">Crear llamado/reporte</h5>
+        <label> Tipo de llamado</label>
+        <br>
+        <select id="selector" @bind="llamado.TipoLlamado">
+            <option selected value="0">-Seleccione un tipo de llamado-</option>
+            <option value="@TipoLlamado.Emergencia">Emergencia</option>
+            <option value="@TipoLlamado.Normal">Normal</option>
+        </select>
+        <br>
+        <label> Origen de llamado</label>
+        <br>
+        <select id="selector" @bind="llamado.OrigenLlamado">
+            <option selected value="0">-Seleccione un origen del llamado-</option>
+            <option value="@TipoOrigenLlamado.Banio">Baño</option>
+            <option value="@TipoOrigenLlamado.Cama">Cama</option>
+        </select>
+        <br>
+        @if (pacientes is not null)
+        {
+            <label> Paciente</label>
+            <br>
+            <select id="selector" @bind="llamado.PacienteId">
+                <option selected value="0">-Seleccione un paciente-</option>
+                @foreach (Paciente p in pacientes)
+                {
+                    <option value="@p.PacienteId">@p.Nombre  @p.Apellido</option>
+                    <br>
+                }
+            </select>
+        }
+        <br>
+        @if (personal is not null)
+        {
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="selector1"> Personal a cargo: </label>
+                    <br>
+                    <select id="selector1" @bind="llamado.PersonalMedicoId">
+                        <option selected value="0">-Seleccione un enfermero/a-</option>
+                        @foreach (PersonalMedico p in personal)
+                        {
+                            <option value="@p.PersonalMedicoId">@p.Nombre  @p.Apellido</option>
+                        }
+                    </select>
 
-				</div>
-			</div>
-		}
+                </div>
+            </div>
+        }
 
-		@if (zonas is not null)
-		{
-			<div class="row mb-3">
-				<div class="col-md-12">
+        @if (zonas is not null)
+        {
+            <div class="row mb-3">
+                <div class="col-md-12">
 
-					<label for="selector1"> Zona: </label>
-					<br>
-					<select id="selector1" @bind="llamado.ZonaId">
-						<option selected value="0">-Seleccione una zona-</option>
-						@foreach (Zona z in zonas)
-						{
-					
-							<option value="@z.ZonaId">@z.Nombre</option>
-						}
-					</select>
+                    <label for="selector1"> Zona: </label>
+                    <br>
+                    <select id="selector1" @bind="llamado.ZonaId">
+                        <option selected value="0">-Seleccione una zona-</option>
+                        @foreach (Zona z in zonas)
+                        {
 
-				</div>
-			</div>
+                            <option value="@z.ZonaId">@z.Nombre</option>
+                        }
+                    </select>
 
-		}
-		
-		<br>
-		<label>Atendido </label>
-		<input type="checkbox" @bind="llamado.Atendido" />
-		<br>
-		<br>
-		<button @onclick="SubirLlamado">Cargar</button>
-	</div>
+                </div>
+            </div>
+
+        }
+
+        <br>
+        <label>Atendido </label>
+        <input type="checkbox" @bind="llamado.Atendido" />
+        <br>
+        <br>
+        <button @onclick="SubirLlamado">Cargar</button>
+    </div>
 </div>
 @code {
-	public class LlamadoViewModel
-	{
-		public TipoLlamado TipoLlamado { get; set; }
-		public TipoOrigenLlamado OrigenLlamado { get; set; }
-		public bool Atendido { get; set; }
-		public DateTime FechaHora { get; set; }
-		public DateTime HoraAtendido { get; set; }
-		public int PacienteId { get; set; }
-		public int ZonaId { get; set; }
-		public int PersonalMedicoId { get; set; }
-	}
+    public class LlamadoViewModel
+    {
+        public TipoLlamado TipoLlamado { get; set; }
+        public TipoOrigenLlamado OrigenLlamado { get; set; }
+        public bool Atendido { get; set; }
+        public DateTime FechaHora { get; set; }
+        public DateTime HoraAtendido { get; set; }
+        public int PacienteId { get; set; }
+        public int ZonaId { get; set; }
+        public int PersonalMedicoId { get; set; }
+    }
+    public class LlamadoViewModelCsv
+    {
+        public TipoLlamado TipoLlamado { get; set; }
+        public TipoOrigenLlamado OrigenLlamado { get; set; }
+        public bool Atendido { get; set; }
+        public DateTime FechaHora { get; set; }
+        public DateTime HoraAtendido { get; set; }
+    }
+    public class FiltrosViewModel
+    {
+        public TipoLlamado TipoLlamado { get; set; }
+        public TipoOrigenLlamado OrigenLlamado { get; set; }
+    }
 
-	public LlamadoViewModel llamado { get; set; } = new();
-	public PersonalMedico[]? personal;
-	public Zona[]? zonas;
-	public Llamado[]? llamados;
-	public Paciente[]? pacientes;
+    public LlamadoViewModel llamado { get; set; } = new();
+    public LlamadoViewModelCsv llamadoCsv { get; set; } = new();
+    public FiltrosViewModel filtros { get; set; } = new();
+    public PersonalMedico[]? personal;
+    public Zona[]? zonas;
+    public Llamado[]? llamados;
+    public Paciente[]? pacientes;
 
-	protected override async Task OnInitializedAsync()
-	{
-		using var db = DbFactory.CreateDbContext();
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
 
-		llamado.FechaHora = DateTime.Now;
-		llamado.HoraAtendido = DateTime.Now;
+        llamado.FechaHora = DateTime.Now;
+        llamado.HoraAtendido = DateTime.Now;
 
-		zonas = await db.Zonas.ToArrayAsync();
-		llamados = await db.Llamados.ToArrayAsync();
-		pacientes = await db.Pacientes.ToArrayAsync();
-		personal = await db.Personal.ToArrayAsync();
-	}
+        zonas = await db.Zonas.ToArrayAsync();
+        Filtrar();
+        pacientes = await db.Pacientes.ToArrayAsync();
+        personal = await db.Personal.ToArrayAsync();
+    }
 
-	public async void SubirLlamado()
-	{
-		using var db = DbFactory.CreateDbContext();
+    public async void SubirLlamado()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
 
-		if (llamado.ZonaId != 0 && llamado.PersonalMedicoId != 0 && llamado.PacienteId != 0)
-		{
-			Llamado l = new()
-				{
-					TipoLlamado = llamado.TipoLlamado,
-					OrigenLlamado = llamado.OrigenLlamado,
-					Atendido = llamado.Atendido,
-					FechaHora = llamado.FechaHora,
-					HoraAtendido = llamado.HoraAtendido,
-					PacienteId = llamado.PacienteId,
-					ZonaId = llamado.ZonaId,
-					PersonalMedicoId = llamado.PersonalMedicoId
-				};
+        if (llamado.ZonaId != 0 && llamado.PersonalMedicoId != 0 && llamado.PacienteId != 0 && llamado.OrigenLlamado != 0 && llamado.TipoLlamado != 0)
+        {
+            Llamado l = new()
+                {
+                    TipoLlamado = llamado.TipoLlamado,
+                    OrigenLlamado = llamado.OrigenLlamado,
+                    Atendido = llamado.Atendido,
+                    FechaHora = llamado.FechaHora,
+                    HoraAtendido = llamado.HoraAtendido,
+                    PacienteId = llamado.PacienteId,
+                    ZonaId = llamado.ZonaId,
+                    PersonalMedicoId = llamado.PersonalMedicoId
+                };
 
-			await db.Llamados.AddAsync(l);
-			await db.SaveChangesAsync();
-			llamados = await db.Llamados.ToArrayAsync();
-			StateHasChanged();
-		}
-	}
+            await db.Llamados.AddAsync(l);
+            await db.SaveChangesAsync();
+            Filtrar();
+        }
+    }
+
+    public async void Filtrar()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+
+        if (filtros.OrigenLlamado != 0 && filtros.TipoLlamado != 0)
+        {
+            llamados = await db.Llamados.Where(l => l.TipoLlamado == filtros.TipoLlamado && l.OrigenLlamado == filtros.OrigenLlamado).ToArrayAsync();
+        }
+        else if (filtros.OrigenLlamado != 0 && filtros.TipoLlamado == 0)
+        {
+            llamados = await db.Llamados.Where(l => l.OrigenLlamado == filtros.OrigenLlamado).ToArrayAsync();
+        }
+        else if (filtros.OrigenLlamado == 0 && filtros.TipoLlamado != 0)
+        {
+            llamados = await db.Llamados.Where(l => l.TipoLlamado == filtros.TipoLlamado).ToArrayAsync();
+        }
+        else if ((filtros.OrigenLlamado == 0 && filtros.TipoLlamado == 0))
+        {
+            llamados = await db.Llamados.ToArrayAsync();
+        }
+        StateHasChanged();
+    }
+
+    public async void ExportarCsv(int llamadoId)
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+
+        Llamado llamado = await db.Llamados.Where(l => l.LlamadoId == llamadoId).SingleAsync();
+
+        llamadoCsv = new()
+            {
+                TipoLlamado = llamado.TipoLlamado,
+                OrigenLlamado = llamado.OrigenLlamado,
+                Atendido = llamado.Atendido,
+                FechaHora = llamado.FechaHora,
+                HoraAtendido = llamado.HoraAtendido
+            };
+
+        using (var memoryStream = new MemoryStream())
+        {
+            using (var writer = new StreamWriter(memoryStream))
+            {
+                using (var csv = new CsvWriter(writer, new System.Globalization.CultureInfo("es-ar")))
+                {
+                    csv.WriteRecord(llamadoCsv);
+                }
+                await JS.GuardarComo("reporte.csv", memoryStream.ToArray());
+            }
+        }
+    }
 }

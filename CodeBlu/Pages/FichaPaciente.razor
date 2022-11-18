@@ -3,297 +3,308 @@
 @page "/fichaPaciente"
 
 <h1 class="text-lg-center">Fichas de pacientes</h1>
-    <br>
+<br>
+
 
 @if (pacientes is not null)
-    {
-        @if (pacientes.Any())
-        {
-            <div class="EstiloTabla container"></div>
-            <table style="margin: 0 auto;" id="tabla1">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>DNI</th>
-                        <th>Dignostico ingreso</th>
-                        <th>Zona</th>
-                        <th>Enfermero a cargo</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (Paciente p in pacientes)
-                    {
-                        <tr>
-                            <td>@p.Nombre</td>
-                            <td>@p.Apellido</td>
-                            <td>@p.DNI</td>
-                            <td>@p.DiagnosticoIngreso</td>
-                            <td>@p.Zona.Nombre</td>
-                            <td>@p.Personal.Nombre</td>
-                            <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
-                            <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <h5>No hay pacientes que mostrar</h5>
-        }
-    }
-    else
-    {
-    <h5>Cargando...</h5>
-    }
-    <br><br>
-<div class="row container">
-    <h4 >Crear ficha de paciente</h4>
-    <br>
-    <br>
-    <br>
-    <div class="col-4">
-    <h6 >Datos</h6>
+{
+	@if (pacientes.Any())
+	{
+		<div class="EstiloTabla container"></div>
+		<table style="margin: 0 auto;" id="tabla1">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>DNI</th>
+					<th>Dignostico ingreso</th>
+					<th>Zona</th>
+					<th>Enfermero a cargo</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (Paciente p in pacientes)
+				{
+					<tr>
+						<td>@p.Nombre</td>
+						<td>@p.Apellido</td>
+						<td>@p.DNI</td>
+						<td>@p.DiagnosticoIngreso</td>
+						<td>@p.Zona.Nombre</td>
+						<td>@p.Personal.Nombre</td>
+						<td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
+						<td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<h5>No hay pacientes que mostrar</h5>
+	}
+}
+else
+{
+	<h5>Cargando...</h5>
+}
+<br>
+<br>
+<form>
+	<div class="row container">
+		<h4>Crear ficha de paciente</h4>
+		<br>
+		<br>
+		<br>
+		<div class="col-4">
+			<h6>Datos</h6>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.Nombre" />
+				<label for="lb">Nombre:</label>
+			</div>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.Apellido" />
+				<label for="lb">Apellido:</label>
+			</div>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.DNI" />
+				<label for="lb">DNI:</label>
+				<br>
+			</div>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.TipoSangre" />
+				<label for="lb">Tipo de sangre:</label>
+				<br>
+			</div>
+			<div class="single-input">
 
-    <label >Nombre:</label>
-    <br>
-    <input  type="text"  @bind="paciente.Nombre"/>
-    <br>
-    <label >Apellido:</label>
-        <br>
-        <input type="text"  @bind="paciente.Apellido" />
-    <br>
-    <label >DNI:</label>
-    <br>
-    <input  type="text" @bind="paciente.DNI" />
-    <br>
-    <label >Tipo de sangre:</label>
-        <br>
-    <input  type="text" @bind="paciente.TipoSangre" />
-    <br>
-    <label >Contacto de emergencia:</label>
-        <br>
-    <input  type="text" @bind="paciente.ContactoEmergencia"  />
-    <br>
-    <label >Fecha de nacimiento:</label>
-        <br>
-    <input  type="datetime"  @bind="paciente.FechaNacimiento" />
-    <br>
-    <label >Edad:</label>
-        <br>
-    <input  type="number"  @bind="paciente.Edad" />
-    <br>
-    <br>
-    </div>
-    <div class="col-lg-4">
-    <h6 id="TituloF">Antecedentes</h6>
-    <label >Asma:</label>
-    <input  type="checkbox"  @bind="paciente.Asma" />
-        <br>
-    <label >Varicela:</label>
-    <input  type="checkbox"  @bind="paciente.TuvoVaricela" />
-    <br>
-    <label >Alergia:</label>
-    <input  type="checkbox"  @bind="paciente.Alergia" />
-        <br>
-        @if(paciente.Alergia)
-        {
-            <label>Detalle alergia:</label>
-            <br>
-            <input type="text" @bind="paciente.DetalleAlergia" />
-            <br>
-        }
-    <label >Medicacion:</label>
-    <input  type="checkbox" @bind="paciente.TomaMedicacion"/>
-        <br>
-        @if (paciente.TomaMedicacion)
-        {
-            <label>Detalle medicacion:</label>
-            <br>
-            <input type="text"  @bind="paciente.DetalleMedicacion"/>
-            <br>
-        }
-    <br>
-</div>
-    <div class="col-lg-4">
-    <h6 id="TituloF">Datos de ingreso</h6>
 
-    <label >Obra social:</label>
-        <br>
-    <input  type="text"  @bind="paciente.ObraSocial"/>
-    <br>
-    <label >N° de afiliado:</label>
-        <br>
-    <input  type="text"  @bind="paciente.NAfilidado"/>
-    <br>
-    <label >Medico de cabecera:</label>
-        <br>
-    <input  type="text"  @bind="paciente.MedicoCabecera"/>
-    <br>
-    <label >Diagnostico de ingreso:</label>
-        <br>
-    <input  type="text"  @bind="paciente.DiagnosticoIngreso"/>
-    <br>
-    <label >Patologia base:</label>
-        <br>
-    <input  type="text"  @bind="paciente.PatologiaBase"/>
-    <br>
-    <br>
-    @if (zonas is not null)
-    {
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="selector1"> Zona: </label>
-                <select id="selector1" @bind="paciente.ZonaId">
-                    <option selected value="0">-Seleccione una zona-</option>
-                    @foreach (Zona z in zonas)
-                    {
-                        <option value="@z.ZonaId">@z.Nombre</option>
-                    }
-                </select>
+				<input type="text" class="input" id="lb" required @bind="paciente.ContactoEmergencia" />
+				<label for="lb">Contacto de emergencia:</label>
+			</div>
+			<br>
 
-            </div>
-        </div>
+			<label>Fecha de nacimiento:</label>
+			<br>
+			<input type="datetime" @bind="paciente.FechaNacimiento" />
+			<br>
+			<label>Edad:</label>
+			<br>
+			<input type="number" @bind="paciente.Edad" />
+			<br>
+			<br>
+		</div>
+		<div class="col-lg-4">
+			<h6 id="TituloF">Antecedentes</h6>
+			<label>Asma:</label>
+			<input type="checkbox" @bind="paciente.Asma" />
+			<br>
+			<label>Varicela:</label>
+			<input type="checkbox" @bind="paciente.TuvoVaricela" />
+			<br>
+			<label>Alergia:</label>
+			<input type="checkbox" @bind="paciente.Alergia" />
+			<br>
+			@if (paciente.Alergia)
+			{
+				<label>Detalle alergia:</label>
+				<br>
+				<input type="text" @bind="paciente.DetalleAlergia" />
+				<br>
+			}
+			<label>Medicacion:</label>
+			<input type="checkbox" @bind="paciente.TomaMedicacion" />
+			<br>
+			@if (paciente.TomaMedicacion)
+			{
+				<label>Detalle medicacion:</label>
+				<br>
+				<input type="text" @bind="paciente.DetalleMedicacion" />
+				<br>
+			}
+			<br>
+		</div>
+		<div class="col-lg-4">
+			<h6 id="TituloF">Datos de ingreso</h6>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.ObraSocial" />
+				<label for="lb">Obra social:</label>
+				<br>
+			</div>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.NAfilidado" />
+				<label for="lb">N° de afiliado:</label>
+				<br>
+			</div>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.MedicoCabecera" />
+				<label for="lb">Medico de cabecera:</label>
+				<br>
+			</div>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.DiagnosticoIngreso" />
+				<label for="lb">Diagnostico de ingreso:</label>
+				<br>
+			</div>
+			<div class="single-input">
+				<input type="text" class="input" id="lb" required @bind="paciente.PatologiaBase" />
+				<label for="lb">Patologia base:</label>
+				<br>
+			</div>
+			<br>
+			@if (zonas is not null)
+			{
+				<div class="row mb-3">
+					<div class="col-md-12">
+						<label for="selector1"> Zona: </label>
+						<select id="selector1" @bind="paciente.ZonaId">
+							<option selected value="0">-Seleccione una zona-</option>
+							@foreach (Zona z in zonas)
+							{
+								<option value="@z.ZonaId">@z.Nombre</option>
+							}
+						</select>
 
-    }
-    <br>
-    <br>
-    @if (personal is not null)
-    {
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="selector1"> Personal a cargo: </label>
-                <select id="selector1" @bind="paciente.PersonalMedicoId">
-                    <option selected value="0">-Seleccione un enfermero/a-</option>
-                    @foreach (PersonalMedico p in personal)
-                    {
-                        <option value="@p.PersonalMedicoId">@p.Nombre  @p.Apellido</option>
-                    }
-                </select>
+					</div>
+				</div>
 
-            </div>
-        </div>
-    }
-    <button class="EstiloBtn"@onclick="SubirPaciente">Crear</button>
-    <br>
-    <br>
-    <br>
-    </div>
-    </div>
-    
-                
+			}
+			<br>
+			<br>
+			@if (personal is not null)
+			{
+				<div class="row mb-3">
+					<div class="col-md-12">
+						<label for="selector1"> Personal a cargo: </label>
+						<select id="selector1" @bind="paciente.PersonalMedicoId">
+							<option selected value="0">-Seleccione un enfermero/a-</option>
+							@foreach (PersonalMedico p in personal)
+							{
+								<option value="@p.PersonalMedicoId">@p.Nombre  @p.Apellido</option>
+							}
+						</select>
+
+					</div>
+				</div>
+			}
+			<button class="EstiloBtn" @onclick="SubirPaciente">Crear</button>
+			<br>
+			<br>
+			<br>
+		</div>
+	</div>
+</form>
 @code {
-    public class PacienteViewModel
-    {
-        [Required, StringLength(255)]
-        public string Nombre { get; set; }
-        [Required, StringLength(255)]
-        public string Apellido { get; set; }
-        [Required, StringLength(255)]
-        public string DNI { get; set; }
-        [Required, StringLength(255)]
-        public string ContactoEmergencia{ get; set; }
-        public DateTime FechaNacimiento { get; set; } 
-        public int Edad { get; set; }
-        public bool Asma { get; set; }
-        public bool TuvoVaricela { get; set; } 
-        [Required, StringLength(45)]
-        public string TipoSangre { get; set; }
-        [Required, StringLength(255)]
-        public string ObraSocial { get; set; }
-        [Required, StringLength(255)]
-        public string NAfilidado { get; set; }
-        [Required, StringLength(255)]
-        public string MedicoCabecera { get; set; }
-        [Required, StringLength(255)]
-        public string DiagnosticoIngreso { get; set; }
-        public bool Alergia { get; set; } 
-        [StringLength(255)]
-        public string? DetalleAlergia { get; set; }
-        [Required, StringLength(255)]
-        public string PatologiaBase { get; set; }
-        public bool TomaMedicacion { get; set; } 
-        public string? DetalleMedicacion { get; set; }
-        public int ZonaId { get; set; }
-        public string Zona { get; set; }
-        public int PersonalMedicoId { get; set; }
-        public string PersonalMedico { get; set; }
-    }
+	public class PacienteViewModel
+	{
+		[Required, StringLength(255)]
+		public string Nombre { get; set; }
+		[Required, StringLength(255)]
+		public string Apellido { get; set; }
+		[Required, StringLength(255)]
+		public string DNI { get; set; }
+		[Required, StringLength(255)]
+		public string ContactoEmergencia { get; set; }
+		public DateTime FechaNacimiento { get; set; }
+		public int Edad { get; set; }
+		public bool Asma { get; set; }
+		public bool TuvoVaricela { get; set; }
+		[Required, StringLength(45)]
+		public string TipoSangre { get; set; }
+		[Required, StringLength(255)]
+		public string ObraSocial { get; set; }
+		[Required, StringLength(255)]
+		public string NAfilidado { get; set; }
+		[Required, StringLength(255)]
+		public string MedicoCabecera { get; set; }
+		[Required, StringLength(255)]
+		public string DiagnosticoIngreso { get; set; }
+		public bool Alergia { get; set; }
+		[StringLength(255)]
+		public string? DetalleAlergia { get; set; }
+		[Required, StringLength(255)]
+		public string PatologiaBase { get; set; }
+		public bool TomaMedicacion { get; set; }
+		public string? DetalleMedicacion { get; set; }
+		public int ZonaId { get; set; }
+		public string Zona { get; set; }
+		public int PersonalMedicoId { get; set; }
+		public string PersonalMedico { get; set; }
+	}
 
-    public Paciente[]? pacientes;
-    public PacienteViewModel paciente { get; set; } = new();
-    public PersonalMedico[]? personal;
-    private Zona[]? zonas;
+	public Paciente[]? pacientes;
+	public PacienteViewModel paciente { get; set; } = new();
+	public PersonalMedico[]? personal;
+	private Zona[]? zonas;
 
-    protected override async Task OnInitializedAsync()
-    {
-        paciente.Alergia = false;
-        paciente.TomaMedicacion = false;
+	protected override async Task OnInitializedAsync()
+	{
+		paciente.Alergia = false;
+		paciente.TomaMedicacion = false;
 
-        using var db = await DbFactory.CreateDbContextAsync();
+		using var db = await DbFactory.CreateDbContextAsync();
 
-        zonas = await db.Zonas.ToArrayAsync();
-        personal = await db.Personal.ToArrayAsync();
-        pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
-    }
+		zonas = await db.Zonas.ToArrayAsync();
+		personal = await db.Personal.ToArrayAsync();
+		pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
+	}
 
-    public async void SubirPaciente()
-    {
-        if (paciente.ZonaId != 0
-            && paciente.PersonalMedicoId != 0
-            && !string.IsNullOrWhiteSpace(paciente.Apellido)
-            && !string.IsNullOrWhiteSpace(paciente.ContactoEmergencia)
-            && !string.IsNullOrWhiteSpace(paciente.Nombre)
-            && !string.IsNullOrWhiteSpace(paciente.DNI)
-            && !string.IsNullOrWhiteSpace(paciente.MedicoCabecera)
-            && !string.IsNullOrWhiteSpace(paciente.PatologiaBase)
-            && !string.IsNullOrWhiteSpace(paciente.TipoSangre)
-            && !string.IsNullOrWhiteSpace(paciente.NAfilidado)
-            && !string.IsNullOrWhiteSpace(paciente.ObraSocial)
-            && !string.IsNullOrWhiteSpace(paciente.DiagnosticoIngreso)
-            && paciente.Edad != 0
-        )
-        {
-            using var db = await DbFactory.CreateDbContextAsync();
+	public async void SubirPaciente()
+	{
+		if (paciente.ZonaId != 0
+			&& paciente.PersonalMedicoId != 0
+			&& !string.IsNullOrWhiteSpace(paciente.Apellido)
+			&& !string.IsNullOrWhiteSpace(paciente.ContactoEmergencia)
+			&& !string.IsNullOrWhiteSpace(paciente.Nombre)
+			&& !string.IsNullOrWhiteSpace(paciente.DNI)
+			&& !string.IsNullOrWhiteSpace(paciente.MedicoCabecera)
+			&& !string.IsNullOrWhiteSpace(paciente.PatologiaBase)
+			&& !string.IsNullOrWhiteSpace(paciente.TipoSangre)
+			&& !string.IsNullOrWhiteSpace(paciente.NAfilidado)
+			&& !string.IsNullOrWhiteSpace(paciente.ObraSocial)
+			&& !string.IsNullOrWhiteSpace(paciente.DiagnosticoIngreso)
+			&& paciente.Edad != 0
+		)
+		{
+			using var db = await DbFactory.CreateDbContextAsync();
 
-            Paciente? comprobante = await db.Pacientes.Where(p => p.DNI == paciente.DNI).SingleOrDefaultAsync();
+			Paciente? comprobante = await db.Pacientes.Where(p => p.DNI == paciente.DNI).SingleOrDefaultAsync();
 
-            if (comprobante is null)
-            {
-                Paciente p = new()
-                {
-                    Alergia = paciente.Alergia,
-                    Apellido = paciente.Apellido,
-                    Asma = paciente.Asma,
-                    ContactoEmergencia = paciente.ContactoEmergencia,
-                    DetalleAlergia = paciente.DetalleAlergia,
-                    DetalleMedicacion = paciente.DetalleMedicacion,
-                    DiagnosticoIngreso = paciente.DiagnosticoIngreso,
-                    Edad = paciente.Edad,
-                    DNI = paciente.DNI,
-                    FechaNacimiento = paciente.FechaNacimiento,
-                    MedicoCabecera = paciente.MedicoCabecera,
-                    ObraSocial = paciente.ObraSocial,
-                    NAfiliado = paciente.NAfilidado,
-                    Nombre = paciente.Nombre,
-                    PatologiaBase = paciente.PatologiaBase,
-                    TipoSangre = paciente.TipoSangre,
-                    TuvoVaricela = paciente.TuvoVaricela,
-                    ZonaId = paciente.ZonaId,
-                    PersonalMedicoId = paciente.PersonalMedicoId,
-                    TomaMedicacion = paciente.TomaMedicacion,
-                };
+			if (comprobante is null)
+			{
+				Paciente p = new()
+					{
+						Alergia = paciente.Alergia,
+						Apellido = paciente.Apellido,
+						Asma = paciente.Asma,
+						ContactoEmergencia = paciente.ContactoEmergencia,
+						DetalleAlergia = paciente.DetalleAlergia,
+						DetalleMedicacion = paciente.DetalleMedicacion,
+						DiagnosticoIngreso = paciente.DiagnosticoIngreso,
+						Edad = paciente.Edad,
+						DNI = paciente.DNI,
+						FechaNacimiento = paciente.FechaNacimiento,
+						MedicoCabecera = paciente.MedicoCabecera,
+						ObraSocial = paciente.ObraSocial,
+						NAfiliado = paciente.NAfilidado,
+						Nombre = paciente.Nombre,
+						PatologiaBase = paciente.PatologiaBase,
+						TipoSangre = paciente.TipoSangre,
+						TuvoVaricela = paciente.TuvoVaricela,
+						ZonaId = paciente.ZonaId,
+						PersonalMedicoId = paciente.PersonalMedicoId,
+						TomaMedicacion = paciente.TomaMedicacion,
+					};
 
-                await db.Pacientes.AddAsync(p);
-                await db.SaveChangesAsync();
+				await db.Pacientes.AddAsync(p);
+				await db.SaveChangesAsync();
 
-                paciente = new();
-                pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
-                StateHasChanged();
-            }
-        }
-    }
+				paciente = new();
+				pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
+				StateHasChanged();
+			}
+		}
+	}
 }
