@@ -242,31 +242,19 @@ main[b-9y1jfu65u2] {
         border-spacing: 0;
     }
 
-.news-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px; /*Espacio entre cada columna*/
-    margin: 50px 0px;
+.content {
+    margin-top: 10px;
 }
 
-    .news-cards img {
-        width: 100%;
-        height: 180px;
+    .content .c1 {
+        float: inline-end;
+        width: 250px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .news-cards h3 {
+    .content h2 {
         font-size: 20px;
-        margin: 10px 0;
+        color: #444;
+        border-bottom: solid 1px #444;
     }
-
-    .news-cards a {
-        padding: 10px 0;
-        color: rgb(37, 120, 214);
-        text-transform: uppercase; /*Para que esten en mayúscula*/
-        display: inline-block;
-        font-weight: bold;
-    }
-
-        .news-cards a:hover {
-            text-decoration: underline; /*Agrega una linea debajo del botón de manera estética*/
-        }
