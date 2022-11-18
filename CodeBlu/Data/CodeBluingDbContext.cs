@@ -36,6 +36,12 @@ namespace CodeBlu.Data
                 .Property(l => l.TipoLlamado)
                 .HasConversion<string>()
                 .HasMaxLength(255);
+            
+            modelBuilder
+                .Entity<User>()
+                .Property(u => u.Rol)
+                .HasConversion<string>()
+                .HasMaxLength(255);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CodeBluCore.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace CodeBluCore
 {
@@ -8,5 +9,6 @@ namespace CodeBluCore
         public string Usuario { get; set; }
         [Required, StringLength(255)]
         public string Contrasena { get; set; }
+        public TipoRol Rol { get; set; }
     }
 }
