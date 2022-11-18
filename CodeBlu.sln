@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBlu", "CodeBlu\CodeBlu.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBluCore", "CodeBluCore\CodeBluCore.csproj", "{ADD5B037-494F-4633-9777-CDCDF7C3008C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBluMovil", "CodeBluMovil\CodeBluMovil.csproj", "{0F20C94D-C14A-495B-9928-F68E270A4D37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeBluMovil", "CodeBluMovil\CodeBluMovil.csproj", "{0F20C94D-C14A-495B-9928-F68E270A4D37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

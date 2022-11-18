@@ -32,6 +32,7 @@
                         <td>@u.Usuario</td>
                         <td>@u.ZonaNombre</td>
                         <td>@u.Rol</td>
+                        <td><button @onclick="@(() => { navigationManager.NavigateTo($"/usuarios/editarUsuario/{u.UserId}");})" class="btn-dark"><i class="fa-solid fa-pencil"></i></button></td>
                     </tr>
                 }
             </tbody>
@@ -63,6 +64,7 @@ else
         public string Usuario { get; set; }
         public TipoRol Rol { get; set; }
         public int ZonaId { get; set; }
+        public int UserId { get; set; }
         public string ZonaNombre { get; set; }
     }
 
@@ -96,7 +98,8 @@ else
                     DNI = pm.DNI,
                     ZonaId = pm.ZonaId,
                     ZonaNombre = pm.Zona.Nombre,
-                    Rol = u.Rol
+                    Rol = u.Rol,
+                    UserId = u.UserId
                 };
 
                 usuarios.Add(p);

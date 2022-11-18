@@ -1,0 +1,225 @@
+﻿@inject NavigationManager navigationManager
+@inject IDbContextFactory<CodeBluingDbContext> DbFactory
+@page "/usuarios/editarUsuario/{UserId:int?}"
+
+<div id="layoutAuthentication">
+	<div id="layoutAuthentication_content">
+		<main>
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-7">
+						<div class="card shadow-lg border-0 rounded-lg mt-5">
+							<div class="card-header"><h3 class="text-center font-weight-light my-4">Crear usuario y enfermero/a</h3></div>
+							<div class="card-body">
+								<form>
+									<div class="row mb-3">
+										<div class="col-md-6">
+											<div class="form-floating mb-3 mb-md-0">
+												<input class="form-control" id="inputFirstName" type="text" @bind="personalView.Nombre" />
+												<label for="inputFirstName">Nombre</label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-floating">
+												<input class="form-control" id="inputLastName" type="text" @bind="personalView.Apellido" />
+												<label for="inputLastName">Apellido</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-floating mb-3">
+										<input class="form-control" id="inputEmail" type="text" @bind="personalView.DNI" />
+										<label for="inputEmail">DNI</label>
+									</div>
+									<div class="form-floating mb-3">
+										<input class="form-control" id="inputEmail" type="text" @bind="personalView.Usuario" />
+										<label for="inputEmail">Nombre de usuario</label>
+									</div>
+									<div class="row mb-3">
+										<div class="col-md-6">
+											<div class="form-floating mb-3 mb-md-0">
+												<input class="form-control" id="inputPassword" type="password" @bind="personalView.Contrasena" />
+												<label for="inputPassword">Contraseña</label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-floating mb-3 mb-md-0">
+												<input class="form-control" id="inputPasswordConfirm" type="password" @bind="personalView.ContrasenaConfirm" />
+												<label for="inputPasswordConfirm">Confirmar Contr.</label>
+											</div>
+										</div>
+									</div>
+
+									@*if necesario para evitar crasheos*@
+									@if (zonas is not null)
+									{
+										<div class="row mb-3">
+											<div class="col-md-12">
+												<label for="selector1"> Zona: </label>
+												<select id="selector1" @bind="personalView.ZonaId">
+													<option selected value="0">-Seleccione una zona-</option>
+													@foreach (Zona z in zonas)
+													{
+														<option value="@z.ZonaId">@z.Nombre</option>
+													}
+												</select>
+
+											</div>
+										</div>
+									}
+									<div class="row mb-3">
+										<div class="col-md-12">
+											<label for="selector1"> Rol: </label>
+											<select id="selector1" @bind="personalView.Rol">
+												<option selected value="@TipoRol.Otro">-Seleccione un rol-</option>
+												<option value="@TipoRol.Generico">Generico</option>
+												<option value="@TipoRol.Administrador">Administrador</option>
+											</select>
+										</div>
+									</div>
+									<div class="mt-4 mb-0">
+										<div class="d-grid"><a class="btn btn-primary btn-block" @onclick="EditarUsuarioYPersonal">Crear</a></div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+	<div class="row justify-content-center">
+		<label>*Recuerde que para crear un usuario es necesario que existan zonas*</label>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int? UserId { get; set; }
+
+	public class PersonalMedicoViewModel
+	{
+		//ViewModel que "unifica" usuario y personalMedico
+		[Required, StringLength(255)]
+		public string Nombre { get; set; }
+		[Required, StringLength(255)]
+		public string Apellido { get; set; }
+		[Required, StringLength(255)]
+		public string DNI { get; set; }
+		[Required, StringLength(255)]
+		public string Contrasena { get; set; }
+		[Required, StringLength(255)]
+		public string ContrasenaConfirm { get; set; }
+		[Required, StringLength(255)]
+		public string Usuario { get; set; }
+		public TipoRol Rol { get; set; }
+		public int ZonaId { get; set; }
+	}
+
+	//declaro un nuevo viewModel que va a ser para la muestra y edicion de datos y un array de zonas que se va a mostrar en vistas
+	private PersonalMedicoViewModel personalView { get; set; } = new();
+	private Zona[]? zonas { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		using var db = await DbFactory.CreateDbContextAsync();
+
+		//trae todas las zonas de la base de datos
+		zonas = await db.Zonas.ToArrayAsync();
+
+		//rellena el viewModel con el usuario que le llego de la otra pag
+		User? usuario = await db.Usuarios.Where(u => u.UserId == UserId).SingleOrDefaultAsync();
+		if (usuario is not null)
+		{
+			PersonalMedico? personal = await db.Personal.Where(p => p.DNI == usuario.DNI).SingleOrDefaultAsync();
+			if (personal is not null)
+			{
+				personalView = new()
+					{
+						Apellido = personal.Apellido,
+						DNI = personal.DNI,
+						Contrasena = usuario.Contrasena,
+						ContrasenaConfirm = usuario.Contrasena,
+						Nombre = personal.Nombre,
+						Usuario = usuario.Usuario,
+						Rol = usuario.Rol,
+						ZonaId = personal.ZonaId
+					};
+			}
+		}
+	}
+
+	public async void EditarUsuarioYPersonal()
+	{
+		//este if controla que no haya nada vacio
+		if (personalView.ZonaId != 0
+			&& !string.IsNullOrWhiteSpace(personalView.Apellido)
+			&& !string.IsNullOrWhiteSpace(personalView.Nombre)
+			&& !string.IsNullOrWhiteSpace(personalView.Contrasena)
+			&& !string.IsNullOrWhiteSpace(personalView.ContrasenaConfirm)
+			&& !string.IsNullOrWhiteSpace(personalView.DNI)
+			&& !string.IsNullOrWhiteSpace(personalView.Usuario)
+			&& personalView.Rol != 0
+			&& personalView.Contrasena == personalView.ContrasenaConfirm
+		)
+		{
+			using var db = await DbFactory.CreateDbContextAsync();
+
+			//compruebo que no exista personal con ese usuario o con ese dni
+			User? comprobante1 = await db.Usuarios.Where(u => u.UserId != UserId).SingleOrDefaultAsync();
+			if (comprobante1 is not null)
+			{
+				PersonalMedico? comprobante2 = await db.Personal.Where(p => p.DNI == comprobante1.DNI).SingleOrDefaultAsync();
+				if (comprobante2 is null)
+				{
+					PersonalMedico? p = await db.Personal.Where(p => p.DNI == personalView.DNI).SingleOrDefaultAsync();
+
+					//si el personal existe se modifica y si no crea uno nuevo
+					if (p is not null)
+					{
+						p.Apellido = personalView.Apellido;
+						p.Nombre = personalView.Nombre;
+						p.DNI = personalView.DNI;
+						p.ZonaId = personalView.ZonaId;
+					}
+					else if (p is null)
+					{
+						PersonalMedico pe = new()
+							{
+								Apellido = personalView.Apellido,
+								Nombre = personalView.Nombre,
+								DNI = personalView.DNI,
+								ZonaId = personalView.ZonaId,
+							};
+					}
+					User? u = await db.Usuarios.Where(u => u.DNI == personalView.DNI).SingleOrDefaultAsync();
+
+					//si el usuario existe se modifica y si no crea uno nuevo
+					if (u is not null)
+					{
+						u.Contrasena = personalView.Contrasena;
+						u.Usuario = personalView.Usuario;
+						u.DNI = personalView.DNI;
+						u.Rol = personalView.Rol;
+					}
+					else if (u is null)
+					{
+						User us = new()
+							{
+								Contrasena = personalView.Contrasena,
+								Usuario = personalView.Usuario,
+								DNI = personalView.DNI,
+								Rol = personalView.Rol
+							};
+					}
+					//guarda en la base de datos y guarda cambios
+					await db.AddAsync(p);
+					await db.AddAsync(u);
+					db.SaveChanges();
+
+					//vuelve a la pestaña anterior
+					navigationManager.NavigateTo("/usuarios");
+				}
+			}
+		}
+	}
+}

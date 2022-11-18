@@ -34,8 +34,6 @@
 						<td>@p.DiagnosticoIngreso</td>
 						<td>@p.Zona.Nombre</td>
 						<td>@p.Personal.Nombre</td>
-						<td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
-						<td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
 					</tr>
 				}
 			</tbody>
@@ -43,12 +41,12 @@
 	}
 	else
 	{
-		<h5>No hay pacientes que mostrar</h5>
+		<h5>Cargando...</h5>
 	}
 }
 else
 {
-	<h5>Cargando...</h5>
+		<h5>No hay pacientes que mostrar</h5>
 }
 <br>
 <br>
