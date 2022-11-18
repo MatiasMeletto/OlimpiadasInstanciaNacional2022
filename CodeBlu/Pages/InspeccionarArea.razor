@@ -11,6 +11,8 @@
 <br>
 <div class="container-fluid">
 	<div class="row container">
+
+		@*estos if lo que hacen es: verificar que no sean null para evitar fallos y poner una lista de todos los pacientes/medicos/llamados (cada uno en su correspondiente tabla)*@
 		@if(pacientes is not null)
 		{
 		<div class="col-4">	
@@ -88,17 +90,22 @@
 <br >
 <br >
 <br >
+
+@*usa el navigationManager para volver a la pestaña anterior*@
 <button class="EstiloBtn" @onclick="@(() => { navigationManager.NavigateTo("/zonasAreas"); })"> Volver </button>
 
 @code {
+	//guarda la zona que llego de la otra pagina
 	[Parameter]
 	public int? ZonaId { get; set; }
-
+	
+	//crea un viewModel para zona
 	public class ZonaViewModel
 	{
 		public string Nombre { get; set; }
 	}
 
+	//declara los arreglos que se van a mostrar en vista y los ViewModel
 	public ZonaViewModel zona { get; set; } = new();
 	public Paciente[]? pacientes { get; set; }
 	public Llamado[]? llamados { get; set; }
@@ -108,10 +115,12 @@
 	{
 		using var db = DbFactory.CreateDbContext();
 
+		//rellena los arreglos
 		pacientes = await db.Pacientes.Where(p => p.ZonaId == ZonaId).ToArrayAsync();
 		llamados = await db.Llamados.Where(p => p.ZonaId == ZonaId).ToArrayAsync();
 		personal = await db.Personal.Where(p => p.ZonaId == ZonaId).ToArrayAsync();
 
+		//rellena el viewModel con el parametro que le llega de la otra pag
 		Zona? z = await db.Zonas.Where(z => z.ZonaId == ZonaId).SingleOrDefaultAsync();
 
 		if (z is not null)

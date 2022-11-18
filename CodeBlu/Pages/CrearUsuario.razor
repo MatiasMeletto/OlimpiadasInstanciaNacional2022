@@ -48,7 +48,8 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    
+                                    @*if necesario para evitar crasheos*@
                                     @if (zonas is not null)
                                     {
                                         <div class="row mb-3">
@@ -64,7 +65,6 @@
 
                                             </div>
                                         </div>
-
                                     }
                                     <div class="row mb-3">
                                         <div class="col-md-12">
@@ -95,6 +95,7 @@
 @code {
     public class PersonalMedicoViewModel
     {
+        //ViewModel que "unifica" usuario y personalMedico
         [Required, StringLength(255)]
         public string Nombre { get; set; }
         [Required, StringLength(255)]
@@ -111,6 +112,7 @@
         public int ZonaId { get; set; }
     }
 
+    //declaro un nuevo viewModel que va a ser para la carga de datos y un array de zonas que se va a mostrar en vistas
     private PersonalMedicoViewModel personal { get; set; } = new();
     private Zona[]? zonas { get; set; }
 
@@ -118,40 +120,47 @@
     {
         using var db = await DbFactory.CreateDbContextAsync();
 
+        //trae todas las zonas de la base de datos
         zonas = await db.Zonas.ToArrayAsync();
     }
 
     public async void CrearUsuarioYPersonal()
     {
+        //este if controla que no haya nada vacio
         if (personal.ZonaId != 0 && !string.IsNullOrWhiteSpace(personal.Apellido) && !string.IsNullOrWhiteSpace(personal.Nombre) && !string.IsNullOrWhiteSpace(personal.Contrasena) && !string.IsNullOrWhiteSpace(personal.ContrasenaConfirm) && !string.IsNullOrWhiteSpace(personal.DNI) && !string.IsNullOrWhiteSpace(personal.Usuario) && personal.Rol != 0)
         {
             using var db = await DbFactory.CreateDbContextAsync();
 
+            //compruebo que no exista personal con ese usuario o con ese dni
             PersonalMedico? comprobante1 = await db.Personal.Where(p => p.DNI == personal.DNI).SingleOrDefaultAsync();
             User? comprobante2 = await db.Usuarios.Where(u => u.Usuario == personal.Usuario).SingleOrDefaultAsync();
 
+            //en caso de que no exista y las contraseñas coincidan 
             if (personal.Contrasena == personal.ContrasenaConfirm && comprobante1 is null && comprobante2 is null)
             {
+                //creo un medico y un usuario con lo que saque del personalViewMovil
                 PersonalMedico p = new()
-                    {
-                        Apellido = personal.Apellido,
-                        Nombre = personal.Nombre,
-                        DNI = personal.DNI,
-                        ZonaId = personal.ZonaId,
-                    };
+                {
+                    Apellido = personal.Apellido,
+                    Nombre = personal.Nombre,
+                    DNI = personal.DNI,
+                    ZonaId = personal.ZonaId,
+                };
 
                 User u = new()
-                    {
-                        Contrasena = personal.Contrasena,
-                        Usuario = personal.Usuario,
-                        DNI = personal.DNI,
-                        Rol = personal.Rol
-                    };
+                {
+                    Contrasena = personal.Contrasena,
+                    Usuario = personal.Usuario,
+                    DNI = personal.DNI,
+                    Rol = personal.Rol
+                };
 
+                //los añade a la base de datos y guarda los cambios
                 await db.Personal.AddAsync(p);
                 await db.Usuarios.AddAsync(u);
                 await db.SaveChangesAsync();
 
+                //reinicia el viewModel
                 personal = new();
                 StateHasChanged();
             }

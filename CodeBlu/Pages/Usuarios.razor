@@ -50,6 +50,7 @@ else
 @code {
     public class PersonalMedicoViewModel
     {
+        //view model basado en personal medico
         [Required, StringLength(255)]
         public string Nombre { get; set; }
         [Required, StringLength(255)]
@@ -64,6 +65,8 @@ else
         public int ZonaId { get; set; }
         public string ZonaNombre { get; set; }
     }
+
+    //declara arreglos e inicializa el viewModel
     public List<PersonalMedicoViewModel> usuarios = new();
     public User[]? users;
     public PersonalMedico[]? personal;
@@ -72,9 +75,11 @@ else
     {
         using var db = await DbFactory.CreateDbContextAsync();
 
+        //rellena los arreglos
         users = await db.Usuarios.ToArrayAsync();
         personal = await db.Personal.ToArrayAsync();
 
+        //este foreach rellena el viewModel y lo mete a un arreglo de ViewModels para mostrarlo en vista
         foreach (User u in users)
         {
             PersonalMedico? pm = await db.Personal.Include(p => p.Zona).Where(p => p.DNI == u.DNI).SingleOrDefaultAsync();

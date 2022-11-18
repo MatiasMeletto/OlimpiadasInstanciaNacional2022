@@ -3,6 +3,7 @@
 @inject IJSRuntime JS
 @page "/llamados"
 @using CodeBlu.Helpers
+@using CsvHelper
 
 <div class="container-fluid">
     <div class="Centrar container">
@@ -19,6 +20,7 @@
             <option value="@TipoLlamado.Normal">Normal</option>
         </select>
         <br />
+        @*revisa si hay algo en llamados, si no existe muestra cargando y si esta existe pero esta vacia*@
         @if (llamados is not null)
         {
             @if (llamados.Any())
@@ -44,6 +46,7 @@
                                 <td>@l.FechaHora</td>
                                 <td>@l.HoraAtendido</td>
                                 <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
+                                @*Esto sirve para saber que id tiene el llamado que se quiere exportar*@
                                 <td><button class="btn-dark" @onclick="@(() => { int i = l.LlamadoId; ExportarCsv(i); })"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
                             </tr>
                         }
@@ -52,12 +55,12 @@
             }
             else
             {
-                <label>Cargando...</label>
+                <h3 class="text-center">No hay llamados</h3>
             }
         }
         else
         {
-            <h3 class="text-center">No hay llamados</h3>
+            <label>Cargando...</label>
         }
         <br>
         <br>
@@ -78,6 +81,8 @@
             <option value="@TipoOrigenLlamado.Cama">Cama</option>
         </select>
         <br>
+
+        @*selects que se rellenan con todo lo que haya en la base de datos*@
         @if (pacientes is not null)
         {
             <label> Paciente</label>
@@ -142,6 +147,7 @@
 @code {
     public class LlamadoViewModel
     {
+        //viewModel basado en Llamados
         public TipoLlamado TipoLlamado { get; set; }
         public TipoOrigenLlamado OrigenLlamado { get; set; }
         public bool Atendido { get; set; }
@@ -153,6 +159,7 @@
     }
     public class LlamadoViewModelCsv
     {
+        //ViewModel de lo que queremos exportar a CSV
         public TipoLlamado TipoLlamado { get; set; }
         public TipoOrigenLlamado OrigenLlamado { get; set; }
         public bool Atendido { get; set; }
@@ -161,10 +168,12 @@
     }
     public class FiltrosViewModel
     {
+        //ViewModel para filtrar
         public TipoLlamado TipoLlamado { get; set; }
         public TipoOrigenLlamado OrigenLlamado { get; set; }
     }
 
+    //se declaran los arreglos y los viewModel se inicializan
     public LlamadoViewModel llamado { get; set; } = new();
     public LlamadoViewModelCsv llamadoCsv { get; set; } = new();
     public FiltrosViewModel filtros { get; set; } = new();
@@ -177,9 +186,11 @@
     {
         using var db = await DbFactory.CreateDbContextAsync();
 
+        //se declara la hora asi porque los llamados no se deberian hacer de aca si no que deberian llegar
         llamado.FechaHora = DateTime.Now;
         llamado.HoraAtendido = DateTime.Now;
 
+        //rellena los arreglos y para el arreglo de llamados usa el filtro
         zonas = await db.Zonas.ToArrayAsync();
         Filtrar();
         pacientes = await db.Pacientes.ToArrayAsync();
@@ -190,20 +201,23 @@
     {
         using var db = await DbFactory.CreateDbContextAsync();
 
+        //revisa que no haya cosas incompletas
         if (llamado.ZonaId != 0 && llamado.PersonalMedicoId != 0 && llamado.PacienteId != 0 && llamado.OrigenLlamado != 0 && llamado.TipoLlamado != 0)
         {
+            //rellena un nuevo objeto con lo que hay en el viewModel
             Llamado l = new()
-                {
-                    TipoLlamado = llamado.TipoLlamado,
-                    OrigenLlamado = llamado.OrigenLlamado,
-                    Atendido = llamado.Atendido,
-                    FechaHora = llamado.FechaHora,
-                    HoraAtendido = llamado.HoraAtendido,
-                    PacienteId = llamado.PacienteId,
-                    ZonaId = llamado.ZonaId,
-                    PersonalMedicoId = llamado.PersonalMedicoId
-                };
+            {
+                TipoLlamado = llamado.TipoLlamado,
+                OrigenLlamado = llamado.OrigenLlamado,
+                Atendido = llamado.Atendido,
+                FechaHora = llamado.FechaHora,
+                HoraAtendido = llamado.HoraAtendido,
+                PacienteId = llamado.PacienteId,
+                ZonaId = llamado.ZonaId,
+                PersonalMedicoId = llamado.PersonalMedicoId
+            };
 
+            //guarda el objeto en la base de datos y realiza un filtro para que se actulice la lista
             await db.Llamados.AddAsync(l);
             await db.SaveChangesAsync();
             Filtrar();
@@ -214,6 +228,7 @@
     {
         using var db = await DbFactory.CreateDbContextAsync();
 
+        //revisa como esta el viewModel de filtros y despues manda a re renderizar la pagina cuando el arrelgo de llamados se haya llenado con lo que se requeria
         if (filtros.OrigenLlamado != 0 && filtros.TipoLlamado != 0)
         {
             llamados = await db.Llamados.Where(l => l.TipoLlamado == filtros.TipoLlamado && l.OrigenLlamado == filtros.OrigenLlamado).ToArrayAsync();
@@ -237,8 +252,10 @@
     {
         using var db = await DbFactory.CreateDbContextAsync();
 
+        //trae el llamado que tenga el mismo id que se le indico en vista
         Llamado llamado = await db.Llamados.Where(l => l.LlamadoId == llamadoId).SingleAsync();
 
+        //rellena el viewModel con lo que se requiera
         llamadoCsv = new()
             {
                 TipoLlamado = llamado.TipoLlamado,
@@ -256,6 +273,8 @@
                 {
                     csv.WriteRecord(llamadoCsv);
                 }
+
+                //crea el archivo csv y con el Guardar como lo descarga
                 await JS.GuardarComo("reporte.csv", memoryStream.ToArray());
             }
         }

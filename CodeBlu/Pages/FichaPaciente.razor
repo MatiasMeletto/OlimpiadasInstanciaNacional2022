@@ -5,7 +5,7 @@
 <h1 class="text-lg-center">Fichas de pacientes</h1>
 <br>
 
-
+@*este codigo mira que el arreglo de pacientes no este vacio y luego si contiene almenos algo, en caso de que exista pero este vacio, dice que no hay, si no existe dice cargando*@
 @if (pacientes is not null)
 {
 	@if (pacientes.Any())
@@ -107,6 +107,7 @@ else
 			<label>Alergia:</label>
 			<input type="checkbox" @bind="paciente.Alergia" />
 			<br>
+			@*estos 2 if hacen que, en caso de ser true, pidan un detalle*@
 			@if (paciente.Alergia)
 			{
 				<label>Detalle alergia:</label>
@@ -154,6 +155,8 @@ else
 				<br>
 			</div>
 			<br>
+
+			@*dos select que se rellenan con arreglos traidos desde la base de datos*@
 			@if (zonas is not null)
 			{
 				<div class="row mb-3">
@@ -199,6 +202,7 @@ else
 @code {
 	public class PacienteViewModel
 	{
+		//un viewModel basado en Paciente
 		[Required, StringLength(255)]
 		public string Nombre { get; set; }
 		[Required, StringLength(255)]
@@ -234,6 +238,7 @@ else
 		public string PersonalMedico { get; set; }
 	}
 
+	//declara arreglos para la vista y declara un nuevo viewModel
 	public Paciente[]? pacientes;
 	public PacienteViewModel paciente { get; set; } = new();
 	public PersonalMedico[]? personal;
@@ -241,11 +246,13 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
+		//Inicializa estos 2 bool en false
 		paciente.Alergia = false;
 		paciente.TomaMedicacion = false;
 
 		using var db = await DbFactory.CreateDbContextAsync();
 
+		//rellena todos los arreglos con lo que haya en la base de datos
 		zonas = await db.Zonas.ToArrayAsync();
 		personal = await db.Personal.ToArrayAsync();
 		pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
@@ -253,6 +260,7 @@ else
 
 	public async void SubirPaciente()
 	{
+		//este if realiza la comprobacion de que nada este vacio
 		if (paciente.ZonaId != 0
 			&& paciente.PersonalMedicoId != 0
 			&& !string.IsNullOrWhiteSpace(paciente.Apellido)
@@ -270,37 +278,42 @@ else
 		{
 			using var db = await DbFactory.CreateDbContextAsync();
 
+			//comprobante para ver si existe un paciente con ese DNI
 			Paciente? comprobante = await db.Pacientes.Where(p => p.DNI == paciente.DNI).SingleOrDefaultAsync();
 
+			//en caso de que no crea uno 
 			if (comprobante is null)
 			{
+				//se rellena con lo que se recogio del viewModel
 				Paciente p = new()
-					{
-						Alergia = paciente.Alergia,
-						Apellido = paciente.Apellido,
-						Asma = paciente.Asma,
-						ContactoEmergencia = paciente.ContactoEmergencia,
-						DetalleAlergia = paciente.DetalleAlergia,
-						DetalleMedicacion = paciente.DetalleMedicacion,
-						DiagnosticoIngreso = paciente.DiagnosticoIngreso,
-						Edad = paciente.Edad,
-						DNI = paciente.DNI,
-						FechaNacimiento = paciente.FechaNacimiento,
-						MedicoCabecera = paciente.MedicoCabecera,
-						ObraSocial = paciente.ObraSocial,
-						NAfiliado = paciente.NAfilidado,
-						Nombre = paciente.Nombre,
-						PatologiaBase = paciente.PatologiaBase,
-						TipoSangre = paciente.TipoSangre,
-						TuvoVaricela = paciente.TuvoVaricela,
-						ZonaId = paciente.ZonaId,
-						PersonalMedicoId = paciente.PersonalMedicoId,
-						TomaMedicacion = paciente.TomaMedicacion,
-					};
+				{
+					Alergia = paciente.Alergia,
+					Apellido = paciente.Apellido,
+					Asma = paciente.Asma,
+					ContactoEmergencia = paciente.ContactoEmergencia,
+					DetalleAlergia = paciente.DetalleAlergia,
+					DetalleMedicacion = paciente.DetalleMedicacion,
+					DiagnosticoIngreso = paciente.DiagnosticoIngreso,
+					Edad = paciente.Edad,
+					DNI = paciente.DNI,
+					FechaNacimiento = paciente.FechaNacimiento,
+					MedicoCabecera = paciente.MedicoCabecera,
+					ObraSocial = paciente.ObraSocial,
+					NAfiliado = paciente.NAfilidado,
+					Nombre = paciente.Nombre,
+					PatologiaBase = paciente.PatologiaBase,
+					TipoSangre = paciente.TipoSangre,
+					TuvoVaricela = paciente.TuvoVaricela,
+					ZonaId = paciente.ZonaId,
+					PersonalMedicoId = paciente.PersonalMedicoId,
+					TomaMedicacion = paciente.TomaMedicacion,
+				};
 
+				//se añade a la base de datos y se guardan cambios
 				await db.Pacientes.AddAsync(p);
 				await db.SaveChangesAsync();
 
+				//se vacia el paciente, se recarga la lista y manda a re renderizar la pagina
 				paciente = new();
 				pacientes = await db.Pacientes.Include(p => p.Zona).Include(p => p.Personal).ToArrayAsync();
 				StateHasChanged();

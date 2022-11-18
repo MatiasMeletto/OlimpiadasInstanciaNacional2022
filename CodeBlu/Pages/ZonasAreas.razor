@@ -9,6 +9,9 @@
 <div class="Centrar container">
 @if(zonas is not null)
 {
+    @if(zonas.Any())
+    {
+
     <div class="EstiloTabla container"></div>
         <table style="margin: 0 auto;" id="tabla1">
         <thead>
@@ -31,10 +34,15 @@
             }
         </tbody>
     </table>
+    }
+    else
+    {
+            <label>Cargando...</label>
+    }
 }
 else 
 {
-    <label>Cargando...</label>
+        <h3 class="text-center">No hay usuarios</h3>
 }
 
 @*Esta parte esta dedicada a la creacion de nuevas zonas*@

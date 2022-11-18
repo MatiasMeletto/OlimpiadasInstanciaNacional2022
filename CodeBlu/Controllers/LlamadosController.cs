@@ -13,19 +13,24 @@ namespace CodeBlu.Controllers
 	[ApiController]
 	public class LlamadosController : ControllerBase
 	{
-        private readonly CodeBluingDbContext _dbContext;
+        //Estes controller se usa para poder responder a la app movil con los llamados que hay en la base de datos
 
+        //declaro un dbcontext
+        private readonly CodeBluingDbContext _dbContext;
         public LlamadosController(CodeBluingDbContext dbContext)
         {
             _dbContext = dbContext;
         }
+
         // GET: api/<LlamadosController>
         [HttpGet]
         public IEnumerable<LlamadoDTO> Get()
         {
+            //traigo la lista de todos los llamados e inicializo una lista de LlamadoDTO
             List<Llamado> llamados = _dbContext.Llamados.Include(l => l.zona).Include(l => l.QuienAtendio).Include(l => l.Paciente).AsNoTracking().ToList();
             List<LlamadoDTO> llamadosDTO = new List<LlamadoDTO>();
 
+            //por cada llamado creo un llamadoDTO y los devuelvo como valor
             foreach (Llamado llamado in llamados)
             {
                 LlamadoDTO commentDTO = new LlamadoDTO()
@@ -34,7 +39,7 @@ namespace CodeBlu.Controllers
                     HoraAtendido = llamado.HoraAtendido,
                     FechaHora = llamado.FechaHora,
                     OrigenLlamado = (CodeBluCore.Enums.TipoOrigenLlamado)llamado.OrigenLlamado,
-                    Paciente = $"{llamado.Paciente.Nombre} {llamado.Paciente.Nombre}",
+                    Paciente = $"{llamado.Paciente.Nombre} {llamado.Paciente.Apellido}",
                     Personal = $"{llamado.QuienAtendio.Nombre} {llamado.QuienAtendio.Apellido}",
                     TipoLlamado = (CodeBluCore.Enums.TipoLlamado)llamado.TipoLlamado,
                     Zona = llamado.zona.Nombre

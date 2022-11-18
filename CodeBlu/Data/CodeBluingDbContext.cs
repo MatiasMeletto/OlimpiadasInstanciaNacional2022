@@ -17,26 +17,31 @@ namespace CodeBlu.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //indico llave unica
             modelBuilder.Entity<Paciente>()
                 .HasIndex(p => p.DNI)
                 .IsUnique();
             
+            //indico llave unica
             modelBuilder.Entity<PersonalMedico>()
                 .HasIndex(p => p.DNI)
                 .IsUnique();
 
+            //guardo los enum como string para mejor legibilidad de la base de datos desde las tablas
             modelBuilder
                 .Entity<Llamado>()
                 .Property(l => l.OrigenLlamado)
                 .HasConversion<string>()
                 .HasMaxLength(255);
-            
+
+            //guardo los enum como string para mejor legibilidad de la base de datos desde las tablas
             modelBuilder
                 .Entity<Llamado>()
                 .Property(l => l.TipoLlamado)
                 .HasConversion<string>()
                 .HasMaxLength(255);
-            
+
+            //guardo los enum como string para mejor legibilidad de la base de datos desde las tablas
             modelBuilder
                 .Entity<User>()
                 .Property(u => u.Rol)

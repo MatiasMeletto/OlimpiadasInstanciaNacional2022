@@ -13,6 +13,9 @@ namespace CodeBlu.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        //Este controller sirve para autenticar de manera manual las cuentas
+
+        //declaro un context
         private readonly CodeBluingDbContext _dbContext;
 
         public UsersController(CodeBluingDbContext dbContext)
@@ -49,6 +52,7 @@ namespace CodeBlu.Controllers
         //[HttpPost]
         public ActionResult<string> Post([FromBody] UserDTO value)
         {
+            //pido que me mande un UserDTO y comparo la contraseña si hay un usuario que coincida con el que llego, en caso de que coincida devuelvo un Ok con un "token"
             User? user = _dbContext.Usuarios.SingleOrDefault(u => u.Usuario == value.Usuario);
 
             if (value.Contrasena == user?.Contrasena)
