@@ -46,7 +46,6 @@
                                 <td>@l.Atendido</td>
                                 <td>@l.FechaHora</td>
                                 <td>@l.HoraAtendido</td>
-                                <td><button class="btn-dark"><i class="fas fa-file-download"></i> Descargar PDF</button></td>
                                 @*Esto sirve para saber que id tiene el llamado que se quiere exportar*@
                                 <td><button class="btn-dark" @onclick="@(() => { int i = l.LlamadoId; ExportarCsv(i); })"><i class="fas fa-file-download"></i> Descargar CSV</button></td>
                             </tr>
